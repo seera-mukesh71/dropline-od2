@@ -5,7 +5,6 @@ export async function POST(request) {
     const body = await request.json();
     const { userId, password } = body;
 
-    // Basic validation
     if (!userId || !password) {
       return Response.json(
         { success: false, error: 'User ID and password are required.' },
@@ -13,15 +12,15 @@ export async function POST(request) {
       );
     }
 
-    // Connect to Neon
     const sql = neon(process.env.DATABASE_URL);
 
-    // Query — match user_id AND password
     const rows = await sql`
       SELECT
         customer_id,
         user_id,
         card_number,
+        account_number,
+        entity_name,
         offer_amount,
         tier,
         interest_rate,
@@ -46,15 +45,17 @@ export async function POST(request) {
     return Response.json({
       success: true,
       customer: {
-        customerId:    customer.customer_id,
-        userId:        customer.user_id,
-        cardNumber:    customer.card_number,
-        offerAmount:   customer.offer_amount,
-        tier:          customer.tier,
-        interestRate:  customer.interest_rate,
-        processingFee: customer.processing_fee,
-        eligible:      customer.eligible,
-        rejectionCode: customer.rejection_code,
+        customerId:     customer.customer_id,
+        userId:         customer.user_id,
+        cardNumber:     customer.card_number,
+        accountNumber:  customer.account_number,
+        entityName:     customer.entity_name,
+        offerAmount:    customer.offer_amount,
+        tier:           customer.tier,
+        interestRate:   customer.interest_rate,
+        processingFee:  customer.processing_fee,
+        eligible:       customer.eligible,
+        rejectionCode:  customer.rejection_code,
       },
     });
 
