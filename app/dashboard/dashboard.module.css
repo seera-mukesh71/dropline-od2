@@ -1,0 +1,230 @@
+/* ── Loading ──────────────────────────────────────────── */
+.loading {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f5f5f5;
+}
+.spinner {
+  width: 36px; height: 36px; border: 3px solid #eee;
+  border-top-color: #E84E20; border-radius: 50%; animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Page ─────────────────────────────────────────────── */
+.pageWrapper {
+  min-height: 100vh; background: #f5f7fb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── White Header ─────────────────────────────────────── */
+.header {
+  background: #fff; border-bottom: 1px solid #e8e8e8;
+  padding: 12px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.headerInner {
+  max-width: 1200px; margin: 0 auto; padding: 0 28px;
+  display: flex; align-items: center;
+}
+.logoGroup    { display: flex; align-items: center; gap: 12px; }
+.logoICICI   { display: flex; align-items: center; gap: 6px; }
+.logoCircle  {
+  width: 28px; height: 28px; background: #C8102E; color: #fff;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 15px; font-style: italic;
+}
+.logoBank    { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+.headerDivider { width: 1px; height: 28px; background: #ddd; }
+.logoDropline  { display: flex; align-items: center; gap: 6px; }
+.dlText        { font-size: 16px; font-weight: 700; color: #E84E20; }
+.odBadge       { background: #E84E20; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+.unsecBadge    { background: #C8102E; color: #fff; font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; }
+
+/* ── Red Nav Bar ──────────────────────────────────────── */
+.navBar {
+  background: #C8102E; padding: 13px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.navTitle  { color: #fff; font-size: 15px; font-weight: 700; letter-spacing: 0.2px; }
+.navRight  { display: flex; align-items: center; gap: 12px; }
+.navLabel  { color: rgba(255,255,255,0.75); font-size: 13px; }
+.navAppNum { color: #fff; font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
+.logoutBtn {
+  background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3);
+  color: #fff; font-size: 17px; width: 32px; height: 32px;
+  border-radius: 8px; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: background 0.15s;
+}
+.logoutBtn:hover { background: rgba(255,255,255,0.28); }
+
+/* ── Page Body ────────────────────────────────────────── */
+.pageBody {
+  max-width: 1200px; margin: 0 auto; padding: 28px 28px 60px;
+}
+
+/* Title row */
+.titleRow {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.pageTitle { font-size: 22px; font-weight: 800; color: #1a3a5c; margin: 0 0 4px; }
+.pageSub   { font-size: 13px; color: #888; margin: 0; }
+.statusBadge {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 1.5px solid #e0e0e0;
+  border-radius: 10px; padding: 8px 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.statusLabel  { font-size: 13px; color: #888; font-weight: 500; }
+.statusActive {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700; color: #2E7D32;
+}
+.statusDot {
+  width: 8px; height: 8px; background: #43A047; border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.5); opacity: 0.6; }
+}
+
+/* ── Stats Strip ──────────────────────────────────────── */
+.statsStrip {
+  background: #fff; border-radius: 14px;
+  padding: 0 8px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border: 1px solid #f0f0f0;
+}
+.statItem {
+  display: flex; align-items: center; gap: 14px;
+  padding: 22px 20px;
+}
+.statDivider {
+  width: 1px; background: #f0f0f0; margin: 16px 0;
+}
+.statIcon {
+  width: 44px; height: 44px; background: #FFF3EE; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0; color: #E84E20;
+  font-weight: 800;
+}
+.statLabel { font-size: 12px; color: #888; margin: 0 0 4px; font-weight: 500; }
+.statValue { font-size: 18px; font-weight: 800; color: #1a3a5c; margin: 0; }
+
+/* ── Section Card ─────────────────────────────────────── */
+.sectionCard {
+  background: #fff; border-radius: 14px;
+  padding: 24px 28px 28px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border: 1px solid #f0f0f0;
+}
+.sectionTitle {
+  font-size: 16px; font-weight: 800; color: #1a3a5c;
+  margin: 0 0 20px; letter-spacing: 0.1px;
+}
+
+/* ── Utilization ──────────────────────────────────────── */
+.utilizationGrid {
+  display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: center;
+}
+.donutWrap {
+  display: flex; align-items: center; justify-content: center;
+}
+.donut { display: block; }
+
+.utilizationStats {
+  display: flex; flex-direction: column; gap: 0;
+}
+.utilizationRow {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 0; border-bottom: 1px solid #f5f5f5;
+}
+.utilizationRow:last-child { border-bottom: none; }
+.utilLabel {
+  font-size: 13px; color: #555; display: flex; align-items: center; gap: 6px;
+}
+.utilVal   { font-size: 14px; font-weight: 700; }
+.infoCircle {
+  font-size: 13px; color: #aaa; cursor: help;
+}
+
+/* ── Actions ──────────────────────────────────────────── */
+.actionsGrid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.actionCard {
+  border: 1.5px solid #f0f0f0; border-radius: 14px;
+  padding: 20px; background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  cursor: default; position: relative;
+}
+.actionCard:hover {
+  border-color: #E84E20;
+  box-shadow: 0 6px 24px rgba(232,78,32,0.12);
+  transform: translateY(-3px);
+}
+.actionTop {
+  display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px;
+}
+.actionIconWrap {
+  width: 44px; height: 44px; background: #FFF3EE;
+  border-radius: 10px; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; font-size: 20px;
+}
+.actionTitle { font-size: 14px; font-weight: 700; color: #1a1a1a; margin: 0 0 4px; }
+.actionDesc  { font-size: 12px; color: #888; line-height: 1.5; margin: 0; }
+
+.actionBtn {
+  width: 100%; padding: 11px;
+  color: #fff; border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: all 0.15s; letter-spacing: 0.2px;
+}
+.actionBtn:hover { filter: brightness(1.12); transform: translateY(-1px); }
+
+/* ── Tooltip ──────────────────────────────────────────── */
+.tooltip {
+  position: absolute; bottom: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%);
+  background: #1a3a5c; color: #fff;
+  font-size: 12px; line-height: 1.55;
+  padding: 12px 16px; border-radius: 10px;
+  width: 240px; text-align: left;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.20);
+  z-index: 10;
+  pointer-events: none;
+  animation: fadeUp 0.18s ease;
+}
+.tooltip::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 7px solid transparent; border-top-color: #1a3a5c;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Footer note ──────────────────────────────────────── */
+.footerNote {
+  display: flex; align-items: center; gap: 10px;
+  background: #FFF8F5; border: 1px solid #FFE0D4;
+  border-radius: 10px; padding: 12px 18px;
+  font-size: 13px; color: #E84E20;
+}
+.footerIcon { font-size: 16px; flex-shrink: 0; }
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 900px) {
+  .statsStrip { grid-template-columns: repeat(2, 1fr); }
+  .statDivider { display: none; }
+  .actionsGrid { grid-template-columns: 1fr; }
+  .utilizationGrid { grid-template-columns: 1fr; }
+  .donutWrap { justify-content: flex-start; }
+}
+@media (max-width: 600px) {
+  .statsStrip { grid-template-columns: 1fr; }
+  .pageBody   { padding: 16px; }
+  .titleRow   { flex-direction: column; gap: 12px; }
+}
