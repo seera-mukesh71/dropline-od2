@@ -1,18 +1,17 @@
 'use client';
-
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 export default function LandingPage() {
   const router = useRouter();
+  const [savingsAlert, setSavingsAlert] = useState(false);
 
   function handleAccountType(type) {
     if (type === 'current') {
       router.push('/login');
     } else {
-      // Savings account — not eligible, but routing to login still
-      // Later you can show an "ineligible" page
-      router.push('/login?type=savings');
+      setSavingsAlert(true);
     }
   }
 
@@ -162,7 +161,41 @@ export default function LandingPage() {
         </div>
 
       </main>
-
+{/* Savings account alert */}
+      {savingsAlert && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 999,
+          background: 'rgba(0,0,0,0.45)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 24, fontFamily: 'inherit'
+        }}>
+          <div style={{
+            background: '#fff', borderRadius: 16, padding: '36px 40px',
+            maxWidth: 420, width: '100%', textAlign: 'center',
+            boxShadow: '0 16px 60px rgba(0,0,0,0.25)',
+            animation: 'none'
+          }}>
+            <div style={{ fontSize: 48, marginBottom: 14 }}>🏦</div>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: '#1a1a1a', marginBottom: 8 }}>
+              Savings Account Not Eligible
+            </h2>
+            <p style={{ fontSize: 14, color: '#666', lineHeight: 1.6, marginBottom: 24 }}>
+              The Dropline OD facility is available only for <strong>Current Account</strong> holders.
+              Savings accounts are not eligible for this product.
+            </p>
+            <button
+              onClick={() => setSavingsAlert(false)}
+              style={{
+                padding: '12px 36px', background: '#E84E20', color: '#fff',
+                border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 700,
+                cursor: 'pointer', width: '100%'
+              }}
+            >
+              Got it, go back
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
