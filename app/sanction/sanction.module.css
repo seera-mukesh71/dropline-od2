@@ -1,0 +1,274 @@
+/* ── Page ─────────────────────────────────────────────── */
+.pageWrapper {
+  min-height: 100vh; background: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── White header ─────────────────────────────────────── */
+.header {
+  background: #fff; border-bottom: 1px solid #e8e8e8;
+  padding: 10px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.headerInner {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.headerLeft  { display: flex; align-items: center; gap: 12px; }
+.logoGroup   { display: flex; align-items: center; gap: 6px; }
+.logoCircle  {
+  width: 26px; height: 26px; background: #C8102E; color: #fff;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; font-style: italic;
+}
+.logoBank    { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+.headerDivider { width: 1px; height: 24px; background: #ddd; }
+.logoDropline  { display: flex; align-items: center; gap: 6px; }
+.dlText        { font-size: 15px; font-weight: 700; color: #E84E20; }
+.odBadge       { background: #E84E20; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.unsecBadge    { background: #C8102E; color: #fff; font-size: 8px; font-weight: 600; padding: 2px 5px; border-radius: 3px; text-transform: uppercase; }
+.headerRight   { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.appLabel      { color: #888; }
+.appValue      { font-weight: 700; color: #E84E20; }
+
+/* ── Red nav bar ──────────────────────────────────────── */
+.navBar {
+  background: #C8102E; padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.navBack {
+  background: none; border: none; color: #fff;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: opacity 0.15s;
+}
+.navBack:hover { opacity: 0.8; }
+.navAppNum { font-size: 13px; color: rgba(255,255,255,0.85); }
+
+/* ── Page body ────────────────────────────────────────── */
+.pageBody { max-width: 860px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* Sanctioned card */
+.sanctionedCard {
+  background: #e8eef5; border-radius: 10px; padding: 18px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.sanctionedLeft { display: flex; align-items: center; gap: 12px; }
+.sanctionedCheck {
+  width: 28px; height: 28px; background: #1a3a5c; color: #fff;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700;
+}
+.sanctionedTitle { font-size: 20px; font-weight: 700; color: #1a3a5c; margin: 0; }
+.sanctionedRight { text-align: right; }
+.sanctionedLabel { font-size: 12px; color: #1a3a5c; font-weight: 500; margin: 0 0 4px; }
+.sanctionedAmount { font-size: 22px; font-weight: 800; color: #1a3a5c; margin: 0; }
+
+/* Instruction */
+.instruction {
+  font-size: 14px; color: #1a3a5c; font-weight: 600;
+  margin-bottom: 20px; line-height: 1.5;
+}
+
+/* ── Document list ────────────────────────────────────── */
+.docList { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+
+.docRow {
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.docCheckbox {
+  width: 18px; height: 18px; border: 2px solid #1a3a5c;
+  border-radius: 3px; cursor: pointer; accent-color: #1a3a5c;
+  flex-shrink: 0; margin-top: 2px;
+}
+.docLink {
+  background: none; border: none; color: #1a6fba;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  text-decoration: underline; padding: 0; text-align: left;
+  transition: color 0.15s;
+}
+.docLink:hover { color: #C8102E; }
+.docText { font-size: 13px; color: #333; line-height: 1.65; }
+.docAgreedBadge {
+  background: #E8F5E9; color: #2E7D32; font-size: 11px;
+  font-weight: 700; padding: 2px 8px; border-radius: 20px;
+  flex-shrink: 0; margin-top: 2px; white-space: nowrap;
+}
+
+/* ── E-sign section ───────────────────────────────────── */
+.esignSection { margin-bottom: 28px; }
+.esignDivider {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+}
+.esignLine { flex: 1; height: 1px; background: #ddd; }
+.esignTitle { font-size: 16px; font-weight: 700; color: #1a3a5c; white-space: nowrap; margin: 0; }
+
+.esignGrid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+
+.esignBox {
+  border: 1.5px solid #e0e8f0; border-radius: 12px;
+  padding: 20px; background: #fff;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: border-color 0.15s;
+}
+.esignBox:hover { border-color: #1a3a5c; }
+.esignBoxDimmed { opacity: 0.5; pointer-events: none; }
+
+.esignStep {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+}
+.esignStepNum {
+  width: 26px; height: 26px; background: #1a3a5c; color: #fff;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.esignStepLabel { font-size: 13px; font-weight: 700; color: #1a3a5c; }
+
+.esignInputWrap {
+  display: flex; align-items: center;
+  border: 1.5px solid #d0d8e4; border-radius: 8px;
+  background: #f9fafc; padding: 0 12px; height: 48px; gap: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.esignInputWrap:focus-within { border-color: #1a3a5c; background: #fff; box-shadow: 0 0 0 3px rgba(26,58,92,0.08); }
+.inputErr     { border-color: #e53935 !important; }
+.inputVerified { border-color: #2E7D32 !important; background: #f1fff3 !important; }
+
+.esignInput {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-size: 14px; color: #1a1a1a; font-family: inherit;
+}
+.esignInput::placeholder { color: #bbb; }
+.esignInput:disabled { color: #888; }
+
+.eyeBtn {
+  background: none; border: none; cursor: pointer;
+  font-size: 16px; opacity: 0.6; padding: 0; flex-shrink: 0;
+}
+.eyeBtn:hover { opacity: 1; }
+
+.errMsg { font-size: 12px; color: #e53935; font-weight: 500; margin: 0; }
+
+.sendOtpBtn {
+  padding: 10px 16px; background: #1a3a5c; color: #fff;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; width: 100%;
+}
+.sendOtpBtn:hover:not(:disabled) { background: #0f2540; }
+.sendOtpBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.esignInfoBox {
+  background: #EEF3FA; border-radius: 8px; padding: 10px 12px;
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 12px; color: #1a3a5c;
+}
+.infoIcon { font-size: 14px; flex-shrink: 0; }
+
+.otpSentNote { font-size: 12px; color: #555; margin: 0; line-height: 1.5; }
+
+.verifyOtpBtn {
+  padding: 10px 16px; background: #2E7D32; color: #fff;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; width: 100%;
+}
+.verifyOtpBtn:hover:not(:disabled) { background: #1B5E20; }
+.verifyOtpBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.resendBtn {
+  background: none; border: none; color: #1a6fba;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  text-decoration: underline; padding: 0;
+}
+.resendDisabled { color: #999 !important; text-decoration: none !important; cursor: default !important; }
+
+.verifiedBadge {
+  background: #E8F5E9; color: #2E7D32; border-radius: 8px;
+  padding: 10px 14px; font-size: 13px; font-weight: 700;
+  text-align: center;
+}
+
+/* Final consent */
+.finalConsentRow {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 20px; padding: 16px;
+  background: #f5f7fb; border-radius: 10px;
+}
+
+/* Error */
+.submitErr {
+  background: #fff3f3; border: 1.5px solid #ffcdd2;
+  border-radius: 8px; padding: 10px 14px; color: #C62828;
+  font-size: 13px; font-weight: 500; margin-bottom: 16px;
+}
+
+/* Proceed button */
+.proceedWrap { display: flex; justify-content: center; margin-top: 8px; }
+.proceedBtn {
+  padding: 15px 56px;
+  background: linear-gradient(135deg, #1a3a5c, #0f2540);
+  color: #fff; border: none; border-radius: 40px;
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  transition: all 0.18s; letter-spacing: 0.3px;
+  box-shadow: 0 4px 16px rgba(26,58,92,0.30);
+}
+.proceedBtn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,58,92,0.35); }
+
+/* ══ PDF MODAL ═══════════════════════════════════════════ */
+.modalOverlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modalBox {
+  background: #fff; border-radius: 14px;
+  width: 100%; max-width: 760px; max-height: 92vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  overflow: hidden; position: relative;
+}
+.modalClose {
+  position: absolute; top: 12px; right: 14px; z-index: 10;
+  background: #f0f0f0; border: none; border-radius: 50%;
+  width: 30px; height: 30px; font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.modalClose:hover { background: #e0e0e0; }
+
+.pdfLoading {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px; gap: 16px; color: #888;
+}
+.pdfSpinner {
+  width: 36px; height: 36px; border: 3px solid #eee;
+  border-top-color: #E84E20; border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.pdfScrollArea { flex: 1; overflow: hidden; }
+.pdfFrame { width: 100%; height: 560px; border: none; display: block; }
+
+.modalFooter {
+  border-top: 1px solid #f0f0f0; padding: 14px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  background: #fafafa;
+}
+.scrollHint { font-size: 12px; color: #E84E20; font-style: italic; margin: 0; }
+.agreeBtn {
+  padding: 12px 48px;
+  background: linear-gradient(135deg, #1a3a5c, #0f2540);
+  color: #fff; border: none; border-radius: 30px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: all 0.15s; min-width: 160px;
+}
+.agreeBtn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(26,58,92,0.3); }
+.agreeBtnDisabled { background: #b0bec5 !important; cursor: not-allowed !important; transform: none !important; box-shadow: none !important; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .esignGrid { grid-template-columns: 1fr; }
+  .pageBody  { padding: 16px; }
+  .proceedBtn { padding: 14px 32px; }
+}
