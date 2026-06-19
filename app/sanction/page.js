@@ -12,54 +12,49 @@ export default function SanctionPage() {
   const [appNumber, setAppNumber] = useState('');
 
   // ── Document checkboxes ───────────────────────────────────────────────
-  const [kfsAgreed,    setKfsAgreed]    = useState(false);
+  const [kfsAgreed,     setKfsAgreed]     = useState(false);
   const [appFormAgreed, setAppFormAgreed] = useState(false);
-  const [termsAgreed,  setTermsAgreed]  = useState(false);
+  const [termsAgreed,   setTermsAgreed]   = useState(false);
 
   // ── PDF modal ─────────────────────────────────────────────────────────
-  const [pdfModal,    setPdfModal]    = useState(null);  // null | 'KFS' | 'AppForm'
-  const [pdfUrl,      setPdfUrl]      = useState('');
-  const [pdfLoading,  setPdfLoading]  = useState(false);
+  const [pdfModal,     setPdfModal]     = useState(null);
+  const [pdfUrl,       setPdfUrl]       = useState('');
+  const [pdfLoading,   setPdfLoading]   = useState(false);
   const [canAgree,     setCanAgree]     = useState(false);
   const [pdfReadTimer, setPdfReadTimer] = useState(0);
   const scrollRef                       = useRef(null);
   const timerRef                        = useRef(null);
 
   // ── Aadhaar + OTP ─────────────────────────────────────────────────────
-  const [aadhaar,        setAadhaar]        = useState('');
-  const [showAadhaar,    setShowAadhaar]    = useState(false);
-  const [otp,            setOtp]            = useState('');
-  const [otpSent,        setOtpSent]        = useState(false);
-  const [otpVerified,    setOtpVerified]    = useState(false);
-  const [maskedEmail,    setMaskedEmail]    = useState('');
-  const [fullEmail,      setFullEmail]      = useState('');
-  const [otpTimer,       setOtpTimer]       = useState(0);
-  const [sendingOtp,     setSendingOtp]     = useState(false);
-  const [verifyingOtp,   setVerifyingOtp]   = useState(false);
-  const [aadhaarErr,     setAadhaarErr]     = useState('');
-  const [otpErr,         setOtpErr]         = useState('');
+  const [aadhaar,      setAadhaar]      = useState('');
+  const [showAadhaar,  setShowAadhaar]  = useState(false);
+  const [otp,          setOtp]          = useState('');
+  const [otpSent,      setOtpSent]      = useState(false);
+  const [otpVerified,  setOtpVerified]  = useState(false);
+  const [fullEmail,    setFullEmail]    = useState('');
+  const [otpTimer,     setOtpTimer]     = useState(0);
+  const [sendingOtp,   setSendingOtp]   = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [aadhaarErr,   setAadhaarErr]   = useState('');
+  const [otpErr,       setOtpErr]       = useState('');
 
   // ── Final consent + submit ────────────────────────────────────────────
   const [finalConsent, setFinalConsent] = useState(false);
   const [submitErr,    setSubmitErr]    = useState('');
-  const [submitting,   setSubmitting]   = useState(false);
 
-  // ── Timer countdown ───────────────────────────────────────────────────
+  // ── OTP countdown timer ───────────────────────────────────────────────
   useEffect(() => {
     if (otpTimer <= 0) return;
     const id = setTimeout(() => setOtpTimer(t => t - 1), 1000);
     return () => clearTimeout(id);
   }, [otpTimer]);
 
-  // PDF read timer — counts down, enables I Agree when reaches 0
+  // ── PDF read timer ────────────────────────────────────────────────────
   useEffect(() => {
     if (pdfReadTimer <= 0) return;
     timerRef.current = setTimeout(() => {
       setPdfReadTimer(t => {
-        if (t <= 1) {
-          setCanAgree(true);
-          return 0;
-        }
+        if (t <= 1) { setCanAgree(true); return 0; }
         return t - 1;
       });
     }, 1000);
@@ -70,13 +65,12 @@ export default function SanctionPage() {
   useEffect(() => {
     const stored = sessionStorage.getItem('odCustomer');
     if (!stored) { router.push('/'); return; }
-    const c = JSON.parse(stored);
-    setCustomer(c);
+    setCustomer(JSON.parse(stored));
     const appNum = sessionStorage.getItem('appNumber') || 'CAODE000000';
     setAppNumber(appNum);
   }, [router]);
 
-  // ── Open PDF modal ────────────────────────────────────────────────────
+  // ── Open PDF ──────────────────────────────────────────────────────────
   async function openPdf(docType) {
     if (!customer) return;
     setPdfLoading(true);
@@ -97,16 +91,11 @@ export default function SanctionPage() {
           appNumber,
         }),
       });
-
       if (!res.ok) throw new Error('PDF generation failed');
       const blob = await res.blob();
       const url  = URL.createObjectURL(blob);
       setPdfUrl(url);
-
-      // Start a 15-second countdown — after which I Agree becomes clickable
-      // This simulates "must read the document" requirement
       setPdfReadTimer(15);
-
     } catch (err) {
       console.error(err);
       setPdfModal(null);
@@ -139,7 +128,6 @@ export default function SanctionPage() {
       setAadhaarErr('Please enter a valid 12-digit Aadhaar number.');
       return;
     }
-
     setSendingOtp(true);
     try {
       const res  = await fetch('/api/send-otp', {
@@ -148,14 +136,10 @@ export default function SanctionPage() {
         body:    JSON.stringify({ customerId: customer.customerId }),
       });
       const data = await res.json();
-
       if (!data.success) { setAadhaarErr(data.error); return; }
-
-      setMaskedEmail(data.maskedEmail);
       setFullEmail(data.fullEmail);
       setOtpSent(true);
       setOtpTimer(45);
-
     } catch {
       setAadhaarErr('Network error. Please try again.');
     } finally {
@@ -167,7 +151,6 @@ export default function SanctionPage() {
   async function handleVerifyOtp() {
     setOtpErr('');
     if (otp.length !== 6) { setOtpErr('Please enter the 6-digit OTP.'); return; }
-
     setVerifyingOtp(true);
     try {
       const res  = await fetch('/api/verify-esign', {
@@ -180,10 +163,8 @@ export default function SanctionPage() {
         }),
       });
       const data = await res.json();
-
       if (!data.success) { setOtpErr(data.error); return; }
       setOtpVerified(true);
-
     } catch {
       setOtpErr('Network error. Please try again.');
     } finally {
@@ -204,21 +185,9 @@ export default function SanctionPage() {
         body:    JSON.stringify({ customerId: customer.customerId }),
       });
       const data = await res.json();
-      if (data.success) setOtpTimer(45);
+      if (data.success) { setFullEmail(data.fullEmail); setOtpTimer(45); }
     } catch {}
     finally { setSendingOtp(false); }
-  }
-
-  // ── Proceed to E-sign ─────────────────────────────────────────────────
-  function handleProceed() {
-    setSubmitErr('');
-    if (!kfsAgreed)      { setSubmitErr('Please open and agree to the KFS document.'); return; }
-    if (!appFormAgreed)  { setSubmitErr('Please open and agree to the Application Form.'); return; }
-    if (!termsAgreed)    { setSubmitErr('Please tick the acknowledgement checkbox.'); return; }
-    if (!otpVerified)    { setSubmitErr('Please complete Aadhaar verification and OTP.'); return; }
-    if (!finalConsent)   { setSubmitErr('Please tick the final consent checkbox.'); return; }
-
-    router.push('/congratulations');
   }
 
   // ── Aadhaar formatter ─────────────────────────────────────────────────
@@ -229,10 +198,20 @@ export default function SanctionPage() {
     setAadhaarErr('');
   }
 
+  // ── Proceed ───────────────────────────────────────────────────────────
+  function handleProceed() {
+    setSubmitErr('');
+    if (!kfsAgreed)     { setSubmitErr('Please open and agree to the KFS document.'); return; }
+    if (!appFormAgreed) { setSubmitErr('Please open and agree to the Application Form.'); return; }
+    if (!termsAgreed)   { setSubmitErr('Please tick the acknowledgement checkbox.'); return; }
+    if (!finalConsent)  { setSubmitErr('Please tick the Aadhaar e-Sign consent checkbox.'); return; }
+    if (!otpVerified)   { setSubmitErr('Please complete Aadhaar verification and OTP.'); return; }
+    router.push('/congratulations');
+  }
+
   if (!customer) {
     return (
-      <div style={{ minHeight:'100vh', display:'flex', alignItems:'center',
-                    justifyContent:'center' }}>
+      <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center' }}>
         <div style={{ width:32, height:32, border:'3px solid #eee',
                       borderTopColor:'#E84E20', borderRadius:'50%',
                       animation:'spin 0.7s linear infinite' }} />
@@ -245,7 +224,7 @@ export default function SanctionPage() {
   return (
     <div className={styles.pageWrapper}>
 
-      {/* ── RED HEADER BAR ───────────────────────────────────────────── */}
+      {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.headerLeft}>
@@ -280,7 +259,7 @@ export default function SanctionPage() {
       {/* ── PAGE BODY ────────────────────────────────────────────────── */}
       <div className={styles.pageBody}>
 
-        {/* Sanctioned header card */}
+        {/* Sanctioned card */}
         <div className={styles.sanctionedCard}>
           <div className={styles.sanctionedLeft}>
             <span className={styles.sanctionedCheck}>✓</span>
@@ -294,15 +273,13 @@ export default function SanctionPage() {
           </div>
         </div>
 
-        {/* Instruction text */}
+        {/* Instruction */}
         <p className={styles.instruction}>
           Please read and agree to the following terms and conditions to proceed.
         </p>
 
         {/* ── Document checkboxes ──────────────────────────────────── */}
         <div className={styles.docList}>
-
-          {/* KFS */}
           <div className={styles.docRow}>
             <input
               type="checkbox"
@@ -317,7 +294,6 @@ export default function SanctionPage() {
             {kfsAgreed && <span className={styles.docAgreedBadge}>✓ Agreed</span>}
           </div>
 
-          {/* Application Form */}
           <div className={styles.docRow}>
             <input
               type="checkbox"
@@ -332,7 +308,6 @@ export default function SanctionPage() {
             {appFormAgreed && <span className={styles.docAgreedBadge}>✓ Agreed</span>}
           </div>
 
-          {/* Manual acknowledgement */}
           <div className={styles.docRow}>
             <input
               type="checkbox"
@@ -350,7 +325,23 @@ export default function SanctionPage() {
           </div>
         </div>
 
-        {/* ── Aadhaar E-sign Section ────────────────────────────────── */}
+        {/* ══════════════════════════════════════════════════════════════
+            FIX 1 — E-sign consent ABOVE the Aadhaar section
+        ══════════════════════════════════════════════════════════════ */}
+        <div className={styles.finalConsentRow}>
+          <input
+            type="checkbox"
+            className={styles.docCheckbox}
+            checked={finalConsent}
+            onChange={e => setFinalConsent(e.target.checked)}
+          />
+          <span className={styles.docText}>
+            I hereby give my consent to proceed with Aadhaar based e-Sign on the
+            Transaction Documents.
+          </span>
+        </div>
+
+        {/* ── Aadhaar E-sign Section — BELOW the consent ───────────── */}
         <div className={styles.esignSection}>
           <div className={styles.esignDivider}>
             <div className={styles.esignLine}></div>
@@ -360,7 +351,7 @@ export default function SanctionPage() {
 
           <div className={styles.esignGrid}>
 
-            {/* Box 1: Aadhaar */}
+            {/* Box 1: Aadhaar — always visible */}
             <div className={styles.esignBox}>
               <div className={styles.esignStep}>
                 <span className={styles.esignStepNum}>1</span>
@@ -374,7 +365,7 @@ export default function SanctionPage() {
                   value={aadhaar}
                   onChange={handleAadhaarInput}
                   maxLength={14}
-                  disabled={otpVerified}
+                  disabled={otpSent || otpVerified}
                 />
                 <button
                   type="button"
@@ -386,13 +377,14 @@ export default function SanctionPage() {
               </div>
               {aadhaarErr && <p className={styles.errMsg}>{aadhaarErr}</p>}
 
+              {/* Send OTP — only before OTP is sent */}
               {!otpSent && !otpVerified && (
                 <button
                   className={styles.sendOtpBtn}
                   onClick={handleSendOtp}
                   disabled={sendingOtp}
                 >
-                  {sendingOtp ? 'Sending...' : 'Send OTP →'}
+                  {sendingOtp ? 'Sending OTP…' : 'Send OTP →'}
                 </button>
               )}
 
@@ -402,77 +394,71 @@ export default function SanctionPage() {
               </div>
             </div>
 
-            {/* Box 2: OTP */}
-            <div className={`${styles.esignBox} ${!otpSent ? styles.esignBoxDimmed : ''}`}>
-              <div className={styles.esignStep}>
-                <span className={styles.esignStepNum}>2</span>
-                <span className={styles.esignStepLabel}>Enter OTP sent to your registered email ID</span>
-              </div>
-              <div className={`${styles.esignInputWrap} ${otpErr ? styles.inputErr : ''} ${otpVerified ? styles.inputVerified : ''}`}>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  className={styles.esignInput}
-                  placeholder="Enter 6 digit OTP"
-                  value={otp}
-                  onChange={e => { setOtp(e.target.value.replace(/\D/g,'').slice(0,6)); setOtpErr(''); }}
-                  maxLength={6}
-                  disabled={!otpSent || otpVerified}
-                />
-              </div>
-              {otpErr && <p className={styles.errMsg}>{otpErr}</p>}
-
-              {otpSent && !otpVerified && (
-                <>
-                  <p className={styles.otpSentNote}>
-                    OTP has been sent to <strong>{fullEmail}</strong>
-                  </p>
-                  <button
-                    className={styles.verifyOtpBtn}
-                    onClick={handleVerifyOtp}
-                    disabled={verifyingOtp}
-                  >
-                    {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
-                  </button>
-                  <button
-                    className={`${styles.resendBtn} ${otpTimer > 0 ? styles.resendDisabled : ''}`}
-                    onClick={handleResendOtp}
-                    disabled={otpTimer > 0 || sendingOtp}
-                  >
-                    {otpTimer > 0
-                      ? `Resend OTP in 0:${String(otpTimer).padStart(2,'0')}`
-                      : 'Resend OTP'}
-                  </button>
-                </>
-              )}
-
-              {otpVerified && (
-                <div className={styles.verifiedBadge}>
-                  ✓ OTP Verified Successfully
+            {/* Box 2: OTP — appears ONLY after Send OTP is clicked */}
+            {otpSent && (
+              <div className={styles.esignBox}>
+                <div className={styles.esignStep}>
+                  <span className={styles.esignStepNum}>2</span>
+                  <span className={styles.esignStepLabel}>
+                    Enter OTP sent to your registered email ID
+                  </span>
                 </div>
-              )}
-            </div>
 
-          </div>{/* end esignGrid */}
+                {!otpVerified ? (
+                  <>
+                    <div className={`${styles.esignInputWrap} ${otpErr ? styles.inputErr : ''}`}>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        className={styles.esignInput}
+                        placeholder="Enter 6 digit OTP"
+                        value={otp}
+                        onChange={e => {
+                          setOtp(e.target.value.replace(/\D/g, '').slice(0, 6));
+                          setOtpErr('');
+                        }}
+                        maxLength={6}
+                        autoFocus
+                      />
+                    </div>
+                    {otpErr && <p className={styles.errMsg}>{otpErr}</p>}
+
+                    <p className={styles.otpSentNote}>
+                      OTP has been sent to <strong>{fullEmail}</strong>
+                    </p>
+
+                    <button
+                      className={styles.verifyOtpBtn}
+                      onClick={handleVerifyOtp}
+                      disabled={verifyingOtp}
+                    >
+                      {verifyingOtp ? 'Verifying…' : 'Verify OTP'}
+                    </button>
+
+                    <button
+                      className={`${styles.resendBtn} ${otpTimer > 0 ? styles.resendDisabled : ''}`}
+                      onClick={handleResendOtp}
+                      disabled={otpTimer > 0 || sendingOtp}
+                    >
+                      {otpTimer > 0
+                        ? `Resend OTP in 0:${String(otpTimer).padStart(2, '0')}`
+                        : 'Resend OTP'}
+                    </button>
+                  </>
+                ) : (
+                  <div className={styles.verifiedBadge}>
+                    ✓ OTP Verified Successfully
+                  </div>
+                )}
+              </div>
+            )}
+
+          </div>
         </div>
 
-        {/* ── Final consent checkbox ────────────────────────────────── */}
-        <div className={styles.finalConsentRow}>
-          <input
-            type="checkbox"
-            className={styles.docCheckbox}
-            checked={finalConsent}
-            onChange={e => setFinalConsent(e.target.checked)}
-          />
-          <span className={styles.docText}>
-            I hereby give my consent to proceed with Aadhaar based e-Sign on the Transaction Documents.
-          </span>
-        </div>
-
-        {/* Error */}
+        {/* Error + Proceed */}
         {submitErr && <div className={styles.submitErr}>⚠ {submitErr}</div>}
 
-        {/* Proceed button */}
         <div className={styles.proceedWrap}>
           <button className={styles.proceedBtn} onClick={handleProceed}>
             Proceed to E-sign
@@ -497,10 +483,7 @@ export default function SanctionPage() {
               </div>
             ) : (
               <>
-                <div
-                  className={styles.pdfScrollArea}
-                  ref={scrollRef}
-                >
+                <div className={styles.pdfScrollArea} ref={scrollRef}>
                   <iframe
                     src={pdfUrl}
                     className={styles.pdfFrame}

@@ -8,10 +8,12 @@ export default function CongratulationsPage() {
   const router   = useRouter();
   const [visible, setVisible] = useState(false);
 
+  const [customer, setCustomer] = useState(null);
+
   useEffect(() => {
     const s = sessionStorage.getItem('odCustomer');
     if (!s) { router.push('/'); return; }
-    // Animate in after mount
+    setCustomer(JSON.parse(s));
     setTimeout(() => setVisible(true), 80);
   }, [router]);
 
@@ -46,6 +48,19 @@ export default function CongratulationsPage() {
           Your <strong>Dropline OD</strong> facility is now <strong>active</strong> and ready to use.
           You can draw funds directly from your linked current account at any time.
         </p>
+
+        {/* Offer amount highlight */}
+        {customer && (
+          <div className={styles.offerHighlight}>
+            <p className={styles.offerHighlightLabel}>Your Approved OD Limit</p>
+            <p className={styles.offerHighlightAmount}>
+              ₹ {Number(customer.finalAmount || customer.offerAmount || 0).toLocaleString('en-IN')}
+            </p>
+            <p className={styles.offerHighlightSub}>
+              at {customer.interestRate || 14.5}% p.a. · {customer.tier || 'Normal'} Tier
+            </p>
+          </div>
+        )}
 
         <div className={styles.infoBox}>
           <div className={styles.infoRow}>

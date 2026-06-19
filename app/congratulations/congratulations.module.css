@@ -118,3 +118,24 @@
   .card { padding: 32px 20px 28px; margin: 16px; }
   .title { font-size: 24px; }
 }
+/* ── Offer highlight ──────────────────────────────────── */
+.offerHighlight {
+  background: linear-gradient(135deg, #fff5f2, #fff0eb);
+  border: 2px solid #E84E20;
+  border-radius: 14px;
+  padding: 18px 20px 14px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.offerHighlightLabel {
+  font-size: 12px; color: #888; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin: 0 0 6px;
+}
+.offerHighlightAmount {
+  font-size: 32px; font-weight: 900; color: #E84E20;
+  margin: 0 0 4px; letter-spacing: -0.5px;
+}
+.offerHighlightSub {
+  font-size: 13px; color: #888; margin: 0; font-weight: 500;
+}
