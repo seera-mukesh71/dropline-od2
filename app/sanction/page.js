@@ -228,9 +228,12 @@ export default function SanctionPage() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.headerLeft}>
-            <div className={styles.logoGroup}>
-              <span className={styles.logoCircle}>i</span>
-              <span className={styles.logoBank}>ICICI Bank</span>
+            <div className={styles.logoICICI}>
+              <img
+                src="/icici-logo.png"
+                alt="ICICI Bank"
+                className={styles.iciciLogoImg}
+              />
             </div>
             <div className={styles.headerDivider}></div>
             <div className={styles.logoDropline}>

@@ -34,25 +34,11 @@
   gap: 6px;
 }
 
-.logoCircle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: #C8102E;
-  color: white;
-  border-radius: 50%;
-  font-weight: 700;
-  font-size: 15px;
-  font-style: italic;
-}
-
-.logoBank {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a1a1a;
-  letter-spacing: -0.2px;
+.iciciLogoImg {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .dividerLine {

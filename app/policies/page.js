@@ -98,8 +98,7 @@ export default function PoliciesPage() {
         <div className={styles.headerInner}>
           <div className={styles.logoGroup}>
             <div className={styles.logoICICI}>
-              <span className={styles.logoCircle}>i</span>
-              <span className={styles.logoBank}>ICICI Bank</span>
+              <img src="/icici-logo.png" alt="ICICI Bank" className={styles.iciciLogoImg} />
             </div>
             <div className={styles.divider}></div>
             <div className={styles.logoDropline}>

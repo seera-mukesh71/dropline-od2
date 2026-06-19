@@ -26,12 +26,12 @@
 }
 .logoGroup { display: flex; align-items: center; gap: 12px; }
 .logoICICI { display: flex; align-items: center; gap: 6px; }
-.logoCircle {
-  width: 28px; height: 28px; background: #C8102E; color: #fff;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 15px; font-style: italic;
+.iciciLogoImg {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
-.logoBank { font-size: 16px; font-weight: 700; color: #1a1a1a; }
 .divider { width: 1px; height: 28px; background: #ddd; }
 .logoDropline { display: flex; align-items: center; gap: 6px; }
 .dlText { font-size: 16px; font-weight: 700; color: #E84E20; }
