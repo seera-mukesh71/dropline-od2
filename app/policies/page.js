@@ -5,7 +5,7 @@ import { useRouter }                   from 'next/navigation';
 import styles                          from './policies.module.css';
 
 export default function PoliciesPage() {
-  const router   = useRouter();
+  const router    = useRouter();
   const scrollRef = useRef(null);
 
   // ── Customer from session ─────────────────────────────────────────────
@@ -18,19 +18,19 @@ export default function PoliciesPage() {
   }, [router]);
 
   // ── MODAL state ───────────────────────────────────────────────────────
-  const [showModal,    setShowModal]    = useState(true);
-  const [loanAmount,   setLoanAmount]   = useState('');
-  const [amountErr,    setAmountErr]    = useState('');
+  const [showModal,     setShowModal]     = useState(true);
+  const [loanAmount,    setLoanAmount]    = useState('');   // always blank — never pre-filled
+  const [amountErr,     setAmountErr]     = useState('');
   const [amountConsent, setAmountConsent] = useState(false);
 
   // ── POLICY checkboxes ─────────────────────────────────────────────────
-  const [privacyTicked,  setPrivacyTicked]  = useState(false);
-  const [declareTicked,  setDeclareTicked]  = useState(null);  // null | 'confirm' | 'not-confirm'
-  const [policyErr,      setPolicyErr]      = useState('');
+  const [privacyTicked, setPrivacyTicked] = useState(false);
+  const [declareTicked, setDeclareTicked] = useState(null); // null | 'confirm' | 'not-confirm'
+  const [policyErr,     setPolicyErr]     = useState('');
 
-  // ── Loan amount formatting ────────────────────────────────────────────
-  const MIN = 100000;   // ₹1,00,000
-  const MAX = 5000000;  // ₹50,00,000
+  // ── Loan amount constants — fixed product range, NOT customer offer ────
+  const MIN  = 100000;   // ₹1,00,000  — product floor
+  const MAX  = 5000000;  // ₹50,00,000 — product ceiling (not customer-specific)
   const STEP = 500;
 
   function formatINR(num) {
@@ -45,19 +45,20 @@ export default function PoliciesPage() {
 
   function validateAmount() {
     const num = parseInt(loanAmount, 10);
-    if (!loanAmount || isNaN(num))   return 'Please enter a loan amount.';
-    if (num < MIN)                    return `Minimum amount is ₹${formatINR(MIN)}.`;
-    if (num > MAX)                    return `Maximum amount is ₹${formatINR(MAX)}.`;
-    if (num % STEP !== 0)             return `Amount must be in multiples of ₹${STEP}.`;
+    if (!loanAmount || isNaN(num)) return 'Please enter a loan amount.';
+    if (num < MIN)                 return 'Minimum amount is ₹1,00,000.';
+    if (num > MAX)                 return 'Maximum amount is ₹50,00,000.';
+    if (num % STEP !== 0)         return 'Amount must be in multiples of ₹500.';
     return '';
   }
 
   function handleModalContinue() {
     const err = validateAmount();
-    if (err)          { setAmountErr(err); return; }
+    if (err)            { setAmountErr(err); return; }
     if (!amountConsent) { setAmountErr('Please tick the consent checkbox to continue.'); return; }
-    // Save chosen amount to session
-    const stored   = JSON.parse(sessionStorage.getItem('odCustomer') || '{}');
+
+    // Save only the customer's chosen amount — do NOT overwrite offerAmount
+    const stored = JSON.parse(sessionStorage.getItem('odCustomer') || '{}');
     stored.chosenAmount = parseInt(loanAmount, 10);
     sessionStorage.setItem('odCustomer', JSON.stringify(stored));
     setShowModal(false);
@@ -107,7 +108,6 @@ export default function PoliciesPage() {
               <span className={styles.unsecBadge}>Unsecured</span>
             </div>
           </div>
-          {/* Progress — step 3 of 6 = 40% */}
           <div className={styles.progressWrap}>
             <div className={styles.progressTrack}>
               <div className={styles.progressFill} style={{ width: '40%' }}></div>
@@ -123,20 +123,17 @@ export default function PoliciesPage() {
       <div className={`${styles.pageBody} ${showModal ? styles.blurred : ''}`}>
         <div className={styles.pageInner}>
 
-          {/* Back button */}
           <button className={styles.backBtn} onClick={() => router.push('/login')}>
             ‹ Back
           </button>
 
-          {/* Page title */}
           <div className={styles.pageTitle}>
-            <h1>Declarations & Consent</h1>
+            <h1>Declarations &amp; Consent</h1>
             <p className={styles.pageSub}>
               Please read all sections carefully and provide your consent to proceed.
             </p>
           </div>
 
-          {/* ── SCROLLABLE POLICY CARD ──────────────────────────────── */}
           <div className={styles.policyCard} ref={scrollRef}>
 
             {/* ── Section 1: Privacy ───────────────────────────────── */}
@@ -156,19 +153,9 @@ export default function PoliciesPage() {
                     onChange={e => { setPrivacyTicked(e.target.checked); setPolicyErr(''); }}
                   />
                   <span className={styles.checkText}>
-                    I/We confirm having read and understood ICICI Bank's "Privacy Commitment"
-                    available at{' '}
-                    <a
-                      href="https://www.icicibank.com/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.link}
-                    >
-                      https://www.icicibank.com/privacy
-                    </a>
-                    . I/We acknowledge that the same shall be subject to changes by ICICI Bank from
-                    time to time at its sole discretion and I/we agree to keep myself/ourselves
-                    updated with the same.
+                    I/We confirm having read and understood ICICI Bank&apos;s &quot;Privacy Commitment&quot; available at{' '}
+                    <a href="https://www.icicibank.com/privacy" target="_blank" rel="noopener noreferrer" className={styles.link}>https://www.icicibank.com/privacy</a>.{' '}
+                    I/We acknowledge that the same shall be subject to changes by ICICI Bank from time to time at its sole discretion and I/we agree to keep myself/ourselves updated with the same.
                   </span>
                 </label>
               </div>
@@ -190,25 +177,24 @@ export default function PoliciesPage() {
                     senior officer of ICICI Bank.
                   </li>
                   <li>
-                    No director of the ICICI Bank is a manager, director, partner, managing agent,
-                    employee or guarantor of the Borrower, or of a holding/subsidiary of the
-                    Borrower or holds substantial interest in the Borrower or in a
-                    holding/subsidiary of the Borrower and no director of any other bank, subsidiary
-                    directors of subsidiaries of mutual funds/venture capital funds set up by the
-                    ICICI Bank or any other bank holds substantial interest or is interested as
-                    director/partner/manager or as a guarantor of the Borrower.
+                    No director of the ICICI Bank is a manager, director, partner, managing
+                    agent, employee or guarantor of the Borrower, or of a holding/subsidiary
+                    of the Borrower or holds substantial interest in the Borrower or in a
+                    holding/subsidiary of the Borrower and no director of any other bank,
+                    subsidiary directors of subsidiaries of mutual funds/venture capital funds
+                    set up by the ICICI Bank or any other bank holds substantial interest or
+                    is interested as director/partner/manager or as a guarantor of the Borrower.
                   </li>
                   <li>
-                    No relative (as specified by RBI) of a Chairman/Managing Director or director
-                    of banking company (including the ICICI Bank) or their subsidiaries or trustees
-                    of Mutual funds/Venture capital funds set up by a banking company (including
-                    the ICICI Bank) or a relative of senior officer (as specified by RBI) of the
-                    ICICI Bank, hold substantial interest or is interested as a
-                    director/partner/manager or as guarantor of the Borrower.
+                    No relative (as specified by RBI) of a Chairman/Managing Director or
+                    director of banking company (including the ICICI Bank) or their subsidiaries
+                    or trustees of Mutual funds/Venture capital funds set up by a banking
+                    company (including the ICICI Bank) or a relative of senior officer (as
+                    specified by RBI) of the ICICI Bank, hold substantial interest or is
+                    interested as a director/partner/manager or as guarantor of the Borrower.
                   </li>
                 </ul>
 
-                {/* Radio: I confirm / I do not confirm */}
                 <div className={styles.radioGroup}>
                   <label className={`${styles.radioLabel} ${declareTicked === 'confirm' ? styles.radioSelected : ''}`}>
                     <input
@@ -244,19 +230,20 @@ export default function PoliciesPage() {
 
                 <div className={styles.clauseBlock}>
                   <p>
-                    <strong>b.</strong> The grant of overdraft facility is at the absolute discretion
-                    of ICICI Bank ("Bank") and is subject to submission of requisite documents and
-                    meeting Bank's eligibility criteria. The Bank reserves the right at any time to
-                    modify/alter any of the terms &amp; conditions of the facility. The applicant
-                    authorizes the Bank to assess the Credit Bureau report of the
-                    Entity/Proprietor/Partner/Directors and to call, SMS or communicate via
-                    WhatsApp. This consent overrides any registration for DNC/NDNC.
+                    <strong>b.</strong> The grant of overdraft facility is at the absolute
+                    discretion of ICICI Bank ("Bank") and is subject to submission of requisite
+                    documents and meeting Bank's eligibility criteria. The Bank reserves the
+                    right at any time to modify/alter any of the terms &amp; conditions of the
+                    facility. The applicant authorizes the Bank to assess the Credit Bureau
+                    report of the Entity/Proprietor/Partner/Directors and to call, SMS or
+                    communicate via WhatsApp. This consent overrides any registration for
+                    DNC/NDNC.
                   </p>
                 </div>
                 <div className={styles.clauseBlock}>
                   <p>
-                    <strong>c.</strong> With your consent your URC Number will be shared with our
-                    partner Karza for Validation.
+                    <strong>c.</strong> With your consent your URC Number will be shared with
+                    our partner Karza for Validation.
                   </p>
                 </div>
               </div>
@@ -272,10 +259,10 @@ export default function PoliciesPage() {
               </div>
               <div className={styles.sectionBody}>
                 <p className={styles.bodyText}>
-                  I/We hereby furnish my consent to ICICI Bank to share and/or fetch any of my/our
-                  information (including my/our sensitive personal information, location etc.) or any
-                  other device information when ICICI Bank considers such disclosure/fetching as
-                  necessary, with/from:
+                  I/We hereby furnish my consent to ICICI Bank to share and/or fetch any of
+                  my/our information (including my/our sensitive personal information, location
+                  etc.) or any other device information when ICICI Bank considers such
+                  disclosure/fetching as necessary, with/from:
                 </p>
                 <ul className={styles.disclosureList}>
                   <li><strong>a.</strong> Agents of ICICI Bank in any jurisdiction;</li>
@@ -286,8 +273,8 @@ export default function PoliciesPage() {
                     registration agency, having jurisdiction over ICICI Bank;
                   </li>
                   <li>
-                    <strong>c.</strong> Service providers, professional advisors, consultants or
-                    such person with whom ICICI Bank contracts or proposes to contract;
+                    <strong>c.</strong> Service providers, professional advisors, consultants
+                    or such person with whom ICICI Bank contracts or proposes to contract;
                   </li>
                 </ul>
                 <p className={styles.bodyText}>
@@ -319,9 +306,9 @@ export default function PoliciesPage() {
               <div className={styles.sectionBody}>
                 <p className={styles.bodyText}>
                   I/We hereby authorize ICICI Bank to get a one-time access to my/our device's
-                  camera and microphone for the purposes of on-boarding and KYC verification which
-                  is required to be conducted to enable the ICICI Bank to provide the credit
-                  facilities sought by me/us.
+                  camera and microphone for the purposes of on-boarding and KYC verification
+                  which is required to be conducted to enable the ICICI Bank to provide the
+                  credit facilities sought by me/us.
                 </p>
                 <p className={styles.bodyText}>
                   Applicable for NTB or non-KYC compliant customer. Since this is a one-time
@@ -330,14 +317,14 @@ export default function PoliciesPage() {
               </div>
             </section>
 
-            {/* ── Policy error message ──────────────────────────────── */}
+            {/* ── Policy error ──────────────────────────────────────── */}
             {policyErr && (
               <div className={styles.policyErrBanner}>
                 ⚠ {policyErr}
               </div>
             )}
 
-            {/* ── Accept / Decline buttons ──────────────────────────── */}
+            {/* ── Accept / Decline ──────────────────────────────────── */}
             <div className={styles.actionRow}>
               <button
                 className={`${styles.acceptBtn} ${!canAccept() ? styles.acceptDisabled : ''}`}
@@ -362,7 +349,7 @@ export default function PoliciesPage() {
                 'Tick Privacy Commitment above to enable Accept.'}
             </p>
 
-          </div>{/* end policyCard */}
+          </div>
         </div>
       </div>
 
@@ -376,8 +363,11 @@ export default function PoliciesPage() {
             {/* Modal header */}
             <div className={styles.modalHeader}>
               <div className={styles.modalLogo}>
-                <span className={styles.modalLogoCircle}>i</span>
-                <span className={styles.modalLogoBank}>ICICI Bank</span>
+                <img
+                  src="/icici-logo.png"
+                  alt="ICICI Bank"
+                  style={{ height: '28px', width: 'auto', objectFit: 'contain' }}
+                />
               </div>
             </div>
 
@@ -386,12 +376,7 @@ export default function PoliciesPage() {
               <span className={styles.modalTitleOrange}>Dropline OD Application</span>
             </h2>
 
-            {/* Offer amount display */}
-            <div className={styles.modalOfferBadge}>
-              Pre-approved limit: <strong>₹{formatINR(customer.offerAmount)}</strong>
-            </div>
-
-            {/* Amount input */}
+            {/* ── Amount input — blank, no offer amount shown ────────── */}
             <div className={styles.modalField}>
               <label className={styles.modalLabel}>
                 Enter Loan Amount <span className={styles.req}>*</span>
@@ -408,8 +393,9 @@ export default function PoliciesPage() {
                   autoFocus
                 />
               </div>
+              {/* Fixed product range shown — NOT the customer's specific offer */}
               <p className={styles.modalHint}>
-                Enter a value between ₹{formatINR(MIN)} and ₹{formatINR(MAX)} in multiples of ₹{STEP}
+                Enter a value between ₹1,00,000 and ₹50,00,000 in multiples of ₹500
               </p>
               {amountErr && <p className={styles.modalErr}>{amountErr}</p>}
             </div>
