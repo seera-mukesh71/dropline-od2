@@ -1,141 +1,388 @@
-/* ── Overlay ──────────────────────────────────────────── */
-.overlay {
-  position: fixed; inset: 0; z-index: 999;
-  background: linear-gradient(135deg, #E84E20 0%, #C8102E 55%, #7B0D0D 100%);
-  display: flex; align-items: center; justify-content: center;
+/* ── Page ─────────────────────────────────────────────── */
+.pageWrapper {
+  min-height: 100vh;
+  background: #f5f5f5;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── Header ───────────────────────────────────────────── */
+.header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.headerInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logoGroup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.iciciLogo {
+  height: 34px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+.headerDivider {
+  width: 1px;
+  height: 32px;
+  background: #ddd;
+}
+.headerBrandBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.brandName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #E84E20;
+  line-height: 1.2;
+}
+.brandSub {
+  font-size: 11px;
+  color: #888;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+}
+
+/* Application number box */
+.appNumBox {
+  border: 1.5px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  background: #fff;
+}
+.appNumLabel {
+  font-size: 10px;
+  color: #888;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.appNumRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.appNumValue {
+  font-size: 14px;
+  font-weight: 800;
+  color: #E84E20;
+  letter-spacing: 0.5px;
+}
+.copyBtn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.copyBtn:hover { color: #E84E20; }
+
+/* ── Hero Section ─────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #E84E20 0%, #C8102E 50%, #8B0000 100%);
+  padding: 52px 24px 120px;
+  text-align: center;
+  position: relative;
   overflow: hidden;
 }
 
-/* ── Confetti dots ────────────────────────────────────── */
-.confettiWrap {
-  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-}
-.dot {
-  position: absolute; width: 10px; height: 10px; border-radius: 50%;
-  animation: fall 3s ease-in infinite;
-  top: -20px;
-}
-.dot0 { background: #FFD54F; }
-.dot1 { background: #fff; }
-.dot2 { background: #A5D6A7; }
-.dot3 { background: #90CAF9; }
-.dot4 { background: #FFAB91; }
-.dot5 { background: #CE93D8; }
-
-@keyframes fall {
-  0%   { transform: translateY(0) rotate(0deg);    opacity: 1; }
-  100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+/* Decorative wave lines (bottom-right) */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  right: -60px;
+  width: 400px;
+  height: 400px;
+  border: 2px solid rgba(255,255,255,0.06);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-/* ── Card ─────────────────────────────────────────────── */
-.card {
-  background: #fff; border-radius: 20px;
-  padding: 44px 48px 36px;
-  width: 100%; max-width: 480px;
+/* Confetti diamonds */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.diamond {
+  position: absolute;
+  background: #FFD54F;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  animation: float 3s ease-in-out infinite alternate;
+}
+.diamond:nth-child(even) {
+  background: #fff;
+  animation-direction: alternate-reverse;
+}
+@keyframes float {
+  from { transform: rotate(45deg) translateY(0); }
+  to   { transform: rotate(45deg) translateY(-8px); }
+}
+
+/* Checkmark circle */
+.checkCircle {
+  width: 88px;
+  height: 88px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  position: relative;
+  z-index: 1;
+}
+.checkMark {
+  font-size: 44px;
+  color: #E84E20;
+  line-height: 1;
+  font-weight: 900;
+}
+
+/* Hero text */
+.heroTitle {
+  font-size: 42px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+  position: relative;
+  z-index: 1;
+}
+.heroSub {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.92);
+  margin: 0 0 18px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Decorative divider */
+.heroDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 18px;
+  width: 200px;
+  position: relative;
+  z-index: 1;
+}
+.heroDividerLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.4);
+}
+.heroDividerDot {
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.heroBody {
+  font-size: 15px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Card wrap — overlaps the hero bottom ─────────────── */
+.cardWrap {
+  max-width: 920px;
+  margin: -80px auto 0;
+  padding: 0 24px 48px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Facility details card */
+.facilityCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 32px 32px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  margin-bottom: 12px;
+}
+
+/* Card title with side lines */
+.cardTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.cardTitleLine {
+  flex: 1;
+  height: 1px;
+  background: #E84E20;
+  opacity: 0.3;
+}
+.cardTitle {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a3a5c;
+  white-space: nowrap;
+  margin: 0;
+}
+
+/* Four column grid */
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.detailItem {
   text-align: center;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.30);
-  position: relative; z-index: 1;
-  transform: scale(0.88) translateY(24px);
-  opacity: 0;
-  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease;
+  padding: 0 16px;
+  border-right: 1px solid #f0f0f0;
 }
-.cardIn {
-  transform: scale(1) translateY(0);
-  opacity: 1;
+.detailItem:last-child {
+  border-right: none;
 }
-
-/* ── Icon ─────────────────────────────────────────────── */
-.iconRing {
-  width: 80px; height: 80px; margin: 0 auto 20px;
-  background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+.detailIcon {
+  width: 52px;
+  height: 52px;
+  background: #FFF0EB;
   border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(232,78,32,0.20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  font-size: 22px;
+  color: #E84E20;
+  font-weight: 800;
 }
-.iconEmoji { font-size: 40px; line-height: 1; }
+.detailLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a3a5c;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.detailValue {
+  font-size: 22px;
+  font-weight: 900;
+  color: #E84E20;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+.detailValueOrange {
+  font-size: 18px;
+  color: #E84E20;
+}
+.detailSub {
+  font-size: 11px;
+  color: #888;
+  margin: 0;
+  line-height: 1.4;
+}
 
-/* ── Text ─────────────────────────────────────────────── */
-.title {
-  font-size: 30px; font-weight: 900; color: #1a1a1a;
-  margin: 0 0 14px; letter-spacing: -0.5px;
+/* ── Info strip ───────────────────────────────────────── */
+.infoStrip {
+  background: #fff;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  overflow: hidden;
 }
-
-.successBadge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #E8F5E9; color: #2E7D32;
-  font-size: 13px; font-weight: 700;
-  padding: 6px 16px; border-radius: 20px;
-  margin-bottom: 18px;
+.infoStripItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 24px;
 }
-.successDot {
-  width: 8px; height: 8px; background: #43A047;
+.infoStripDivider {
+  width: 1px;
+  height: 100%;
+  background: #f0f0f0;
+}
+.infoStripIcon {
+  width: 40px;
+  height: 40px;
+  background: #FFF0EB;
   border-radius: 50%;
-  animation: pulse 1.4s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #E84E20;
+  font-weight: 700;
+  flex-shrink: 0;
 }
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(1.5); opacity: 0.6; }
+.infoStripText {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+  line-height: 1.4;
 }
 
-.body {
-  font-size: 14px; color: #555; line-height: 1.65;
-  margin-bottom: 24px;
-}
-
-/* ── Info box ─────────────────────────────────────────── */
-.infoBox {
-  background: #f9f9f9; border-radius: 12px;
-  padding: 4px 0; margin-bottom: 28px;
-  border: 1px solid #f0f0f0;
-}
-.infoRow {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px;
-}
-.infoLabel { font-size: 13px; color: #888; font-weight: 500; }
-.infoVal   { font-size: 13px; color: #1a1a1a; font-weight: 700; }
-.infoDivider { height: 1px; background: #f0f0f0; margin: 0 20px; }
-
-/* ── CTA Button ───────────────────────────────────────── */
-.ctaBtn {
-  width: 100%; padding: 15px;
+/* ── Dashboard button ─────────────────────────────────── */
+.dashboardBtn {
+  width: 100%;
+  padding: 18px;
   background: linear-gradient(135deg, #E84E20, #C8102E);
-  color: #fff; border: none; border-radius: 12px;
-  font-size: 16px; font-weight: 700; cursor: pointer;
-  transition: all 0.18s; letter-spacing: 0.2px;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.18s;
   box-shadow: 0 4px 16px rgba(232,78,32,0.35);
-  margin-bottom: 14px;
 }
-.ctaBtn:hover {
+.dashboardBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(232,78,32,0.42);
 }
 
-.note { font-size: 12px; color: #bbb; margin: 0; }
-
-@media (max-width: 520px) {
-  .card { padding: 32px 20px 28px; margin: 16px; }
-  .title { font-size: 24px; }
-}
-/* ── Offer highlight ──────────────────────────────────── */
-.offerHighlight {
-  background: linear-gradient(135deg, #fff5f2, #fff0eb);
-  border: 2px solid #E84E20;
-  border-radius: 14px;
-  padding: 18px 20px 14px;
-  margin-bottom: 18px;
-  text-align: center;
-}
-.offerHighlightLabel {
-  font-size: 12px; color: #888; font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.5px;
-  margin: 0 0 6px;
-}
-.offerHighlightAmount {
-  font-size: 32px; font-weight: 900; color: #E84E20;
-  margin: 0 0 4px; letter-spacing: -0.5px;
-}
-.offerHighlightSub {
-  font-size: 13px; color: #888; margin: 0; font-weight: 500;
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 700px) {
+  .detailsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .detailItem {
+    border-right: none;
+    padding: 0;
+  }
+  .heroTitle  { font-size: 28px; }
+  .heroSub    { font-size: 15px; }
+  .cardWrap   { margin-top: -60px; padding: 0 16px 32px; }
+  .facilityCard { padding: 20px 16px; }
+  .infoStrip  { grid-template-columns: 1fr; }
+  .infoStripDivider { display: none; }
+  .appNumBox  { display: none; }
 }

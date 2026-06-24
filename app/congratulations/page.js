@@ -1,92 +1,225 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter }           from 'next/navigation';
 import styles                  from './congratulations.module.css';
 
-export default function CongratulationsPage() {
-  const router   = useRouter();
-  const [visible, setVisible] = useState(false);
+// Convert number to Indian words (simplified for common lakh/crore values)
+function amountInWords(num) {
+  const n = Number(num);
+  if (!n) return '';
+  if (n >= 10000000) {
+    const cr = n / 10000000;
+    return `Rupees ${cr % 1 === 0 ? cr : cr.toFixed(1)} Crore Only`;
+  }
+  if (n >= 100000) {
+    const lk = n / 100000;
+    return `Rupees ${lk % 1 === 0 ? lk : lk.toFixed(1)} Lakh${lk > 1 ? 's' : ''} Only`;
+  }
+  return `Rupees ${n.toLocaleString('en-IN')} Only`;
+}
 
-  const [customer, setCustomer] = useState(null);
+export default function CongratulationsPage() {
+  const router = useRouter();
+
+  const [customer,  setCustomer]  = useState(null);
+  const [appNumber, setAppNumber] = useState('');
+  const [copied,    setCopied]    = useState(false);
 
   useEffect(() => {
     const s = sessionStorage.getItem('odCustomer');
     if (!s) { router.push('/'); return; }
     setCustomer(JSON.parse(s));
-    setTimeout(() => setVisible(true), 80);
+    const appNum = sessionStorage.getItem('appNumber') || 'CAODE000000';
+    setAppNumber(appNum);
   }, [router]);
 
-  function handleContinue() {
-    router.push('/dashboard');
+  function handleCopy() {
+    navigator.clipboard.writeText(appNumber).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   }
 
+  if (!customer) return null;
+
+  // Use the amount the customer selected on the offer-details slider
+  const sanctionedAmount = customer.finalAmount || customer.offerAmount || 0;
+
   return (
-    <div className={styles.overlay}>
-      {/* Confetti dots (pure CSS) */}
-      <div className={styles.confettiWrap} aria-hidden="true">
-        {Array.from({ length: 18 }).map((_, i) => (
-          <div key={i} className={`${styles.dot} ${styles[`dot${i % 6}`]}`}
-               style={{ left: `${(i * 5.5 + 3) % 100}%`, animationDelay: `${i * 0.12}s` }} />
-        ))}
-      </div>
+    <div className={styles.pageWrapper}>
 
-      <div className={`${styles.card} ${visible ? styles.cardIn : ''}`}>
-        {/* Top icon */}
-        <div className={styles.iconRing}>
-          <span className={styles.iconEmoji}>🎉</span>
+      {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+
+          {/* Left: Logo */}
+          <div className={styles.logoGroup}>
+            <img
+              src="/icici-logo.png"
+              alt="ICICI Bank"
+              className={styles.iciciLogo}
+            />
+            <div className={styles.headerDivider}></div>
+            <div className={styles.headerBrandBlock}>
+              <span className={styles.brandName}>Dropline OD</span>
+              <span className={styles.brandSub}>Unsecured Overdraft Facility</span>
+            </div>
+          </div>
+
+          {/* Right: Application number box */}
+          <div className={styles.appNumBox}>
+            <span className={styles.appNumLabel}>Application Number</span>
+            <div className={styles.appNumRow}>
+              <span className={styles.appNumValue}>{appNumber}</span>
+              <button
+                className={styles.copyBtn}
+                onClick={handleCopy}
+                title="Copy application number"
+              >
+                {copied ? '✓' : '⧉'}
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </header>
+
+      {/* ── RED HERO SECTION ──────────────────────────────────────────── */}
+      <section className={styles.hero}>
+
+        {/* Decorative diamond confetti */}
+        <div className={styles.confetti} aria-hidden="true">
+          {[
+            { top:'12%', left:'6%',  size:14, opacity:0.7 },
+            { top:'28%', left:'3%',  size:10, opacity:0.5 },
+            { top:'55%', left:'8%',  size:16, opacity:0.6 },
+            { top:'70%', left:'4%',  size:10, opacity:0.4 },
+            { top:'18%', left:'18%', size:12, opacity:0.5 },
+            { top:'42%', left:'14%', size:8,  opacity:0.6 },
+            { top:'80%', left:'20%', size:14, opacity:0.5 },
+            { top:'10%', right:'5%', size:14, opacity:0.7 },
+            { top:'30%', right:'3%', size:10, opacity:0.5 },
+            { top:'52%', right:'7%', size:16, opacity:0.6 },
+            { top:'72%', right:'4%', size:10, opacity:0.4 },
+            { top:'20%', right:'17%',size:12, opacity:0.5 },
+            { top:'45%', right:'13%',size:8,  opacity:0.6 },
+            { top:'78%', right:'19%',size:14, opacity:0.5 },
+          ].map((d, i) => (
+            <div
+              key={i}
+              className={styles.diamond}
+              style={{
+                top:     d.top,
+                left:    d.left,
+                right:   d.right,
+                width:   d.size,
+                height:  d.size,
+                opacity: d.opacity,
+                animationDelay: `${i * 0.18}s`,
+              }}
+            />
+          ))}
         </div>
 
-        <h1 className={styles.title}>Congratulations!</h1>
-
-        <div className={styles.successBadge}>
-          <span className={styles.successDot}></span>
-          OD Facility Activated
+        {/* Checkmark circle */}
+        <div className={styles.checkCircle}>
+          <span className={styles.checkMark}>✓</span>
         </div>
 
-        <p className={styles.body}>
-          Your <strong>Dropline OD</strong> facility is now <strong>active</strong> and ready to use.
-          You can draw funds directly from your linked current account at any time.
+        <h1 className={styles.heroTitle}>Congratulations!</h1>
+        <p className={styles.heroSub}>Your Dropline OD Offer Has Been Sanctioned</p>
+
+        {/* Decorative divider line with dot */}
+        <div className={styles.heroDivider}>
+          <div className={styles.heroDividerLine}></div>
+          <div className={styles.heroDividerDot}></div>
+          <div className={styles.heroDividerLine}></div>
+        </div>
+
+        <p className={styles.heroBody}>
+          Your Unsecured Dropline OD facility is now active.<br />
+          You can start using your sanctioned limit immediately.
         </p>
 
-        {/* Offer amount highlight */}
-        {customer && (
-          <div className={styles.offerHighlight}>
-            <p className={styles.offerHighlightLabel}>Your Approved OD Limit</p>
-            <p className={styles.offerHighlightAmount}>
-              ₹ {Number(customer.finalAmount || customer.offerAmount || 0).toLocaleString('en-IN')}
-            </p>
-            <p className={styles.offerHighlightSub}>
-              at {customer.interestRate || 14.5}% p.a. · {customer.tier || 'Normal'} Tier
-            </p>
-          </div>
-        )}
+      </section>
 
-        <div className={styles.infoBox}>
-          <div className={styles.infoRow}>
-            <span className={styles.infoLabel}>💳 Access Via</span>
-            <span className={styles.infoVal}>Your Current Account</span>
+      {/* ── WHITE FACILITY DETAILS CARD ───────────────────────────────── */}
+      <div className={styles.cardWrap}>
+        <div className={styles.facilityCard}>
+
+          <div className={styles.cardTitleRow}>
+            <div className={styles.cardTitleLine}></div>
+            <h2 className={styles.cardTitle}>Your Sanctioned Facility Details</h2>
+            <div className={styles.cardTitleLine}></div>
           </div>
-          <div className={styles.infoDivider}></div>
-          <div className={styles.infoRow}>
-            <span className={styles.infoLabel}>⚡ Availability</span>
-            <span className={styles.infoVal}>Instant — Active Now</span>
-          </div>
-          <div className={styles.infoDivider}></div>
-          <div className={styles.infoRow}>
-            <span className={styles.infoLabel}>💰 Interest</span>
-            <span className={styles.infoVal}>Only on amount used</span>
+
+          <div className={styles.detailsGrid}>
+
+            {/* Sanctioned Limit */}
+            <div className={styles.detailItem}>
+              <div className={styles.detailIcon}>🏦</div>
+              <p className={styles.detailLabel}>Sanctioned Limit</p>
+              <p className={styles.detailValue}>
+                ₹{Number(sanctionedAmount).toLocaleString('en-IN')}
+              </p>
+              <p className={styles.detailSub}>{amountInWords(sanctionedAmount)}</p>
+            </div>
+
+            {/* Tenure */}
+            <div className={styles.detailItem}>
+              <div className={styles.detailIcon}>📅</div>
+              <p className={styles.detailLabel}>Tenure</p>
+              <p className={styles.detailValue}>36 Months</p>
+              <p className={styles.detailSub}>Upto 36 Months</p>
+            </div>
+
+            {/* Interest Rate */}
+            <div className={styles.detailItem}>
+              <div className={styles.detailIcon}>%</div>
+              <p className={styles.detailLabel}>Interest Rate</p>
+              <p className={styles.detailValue}>16.9 p.a.</p>
+              <p className={styles.detailSub}>Per Annum (Floating)</p>
+            </div>
+
+            {/* Repayment Structure */}
+            <div className={styles.detailItem}>
+              <div className={styles.detailIcon}>📊</div>
+              <p className={styles.detailLabel}>Repayment Structure</p>
+              <p className={`${styles.detailValue} ${styles.detailValueOrange}`}>
+                Reducing Dropline
+              </p>
+              <p className={styles.detailSub}>Limit reduces as per repayment schedule</p>
+            </div>
+
           </div>
         </div>
 
-        <button className={styles.ctaBtn} onClick={handleContinue}>
-          View My OD Dashboard →
+        {/* ── Info strip ──────────────────────────────────────────────── */}
+        <div className={styles.infoStrip}>
+          <div className={styles.infoStripItem}>
+            <div className={styles.infoStripIcon}>🛡</div>
+            <span className={styles.infoStripText}>Facility activated successfully</span>
+          </div>
+          <div className={styles.infoStripDivider}></div>
+          <div className={styles.infoStripItem}>
+            <div className={styles.infoStripIcon}>₹</div>
+            <span className={styles.infoStripText}>
+              Interest will be charged only on the utilized amount
+            </span>
+          </div>
+        </div>
+
+        {/* ── Go to Dashboard button ───────────────────────────────────── */}
+        <button
+          className={styles.dashboardBtn}
+          onClick={() => router.push('/dashboard')}
+        >
+          Go to Dashboard &nbsp;→
         </button>
 
-        <p className={styles.note}>
-          Manage, track, and repay your overdraft facility from your dashboard.
-        </p>
       </div>
+
     </div>
   );
 }
