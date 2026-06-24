@@ -1,5 +1,6 @@
-'use client';
 
+'use client';
+import HeaderSimple from '../components/HeaderSimple';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter }                   from 'next/navigation';
 import styles                          from './policies.module.css';
@@ -95,29 +96,7 @@ export default function PoliciesPage() {
     <div className={styles.pageWrapper}>
 
       {/* ── HEADER ───────────────────────────────────────────────────── */}
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-          <div className={styles.logoGroup}>
-            <div className={styles.logoICICI}>
-              <img src="/icici-logo.png" alt="ICICI Bank" className={styles.iciciLogoImg} />
-            </div>
-            <div className={styles.divider}></div>
-            <div className={styles.logoDropline}>
-              <span className={styles.dlText}>Dropline</span>
-              <span className={styles.odBadge}>OD</span>
-              <span className={styles.unsecBadge}>Unsecured</span>
-            </div>
-          </div>
-          <div className={styles.progressWrap}>
-            <div className={styles.progressTrack}>
-              <div className={styles.progressFill} style={{ width: '40%' }}></div>
-            </div>
-            <div className={styles.progressTrack}>
-              <div className={styles.progressFillGray}></div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <HeaderSimple />
 
       {/* ── BLURRED BACKGROUND when modal is open ────────────────────── */}
       <div className={`${styles.pageBody} ${showModal ? styles.blurred : ''}`}>

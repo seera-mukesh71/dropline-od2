@@ -1,4 +1,6 @@
+
 'use client';
+import HeaderSimple from './components/HeaderSimple';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
@@ -19,21 +21,7 @@ export default function LandingPage() {
     <div className={styles.pageWrapper}>
 
       {/* ── TOP HEADER BAR ─────────────────────────────── */}
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-          <div className={styles.logoGroup}>
-            <div className={styles.logoICICI}>
-              <img src="/icici-logo.png" alt="ICICI Bank" className={styles.iciciLogoImg} />
-            </div>
-            <div className={styles.dividerLine}></div>
-            <div className={styles.logoDropline}>
-              <span className={styles.droplineText}>Dropline</span>
-              <span className={styles.odBadge}>OD</span>
-              <span className={styles.unsecuredBadge}>unsecured</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <HeaderSimple />
 
       {/* ── HERO BANNER ────────────────────────────────── */}
       <section className={styles.hero}>

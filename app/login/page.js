@@ -1,5 +1,6 @@
-'use client';
 
+'use client';
+import HeaderSimple from '../components/HeaderSimple';
 import { useState, useEffect, useCallback, memo } from 'react';
 import { useRouter }                               from 'next/navigation';
 import styles                                      from './login.module.css';
@@ -216,41 +217,12 @@ export default function LoginPage() {
     }
   }
 
-  // ── Header (reused) ───────────────────────────────────────────────────
-  const Header = (
-    <header className={styles.header}>
-      <div className={styles.headerInner}>
-        <div className={styles.logoGroup}>
-          <div className={styles.logoICICI}>
-            <img
-              src="/icici-logo.png"
-              alt="ICICI Bank"
-              className={styles.iciciLogoImg}
-            />
-          </div>
-          <div className={styles.divider}></div>
-          <div className={styles.logoDropline}>
-            <span className={styles.dlText}>Dropline</span>
-            <span className={styles.odBadge}>OD</span>
-            <span className={styles.unsecBadge}>Unsecured</span>
-          </div>
-        </div>
-        <div className={styles.progressWrap}>
-          <div className={styles.progressTrack}>
-            <div className={styles.progressFill} style={{ width: '20%' }}></div>
-          </div>
-          <div className={styles.progressTrack}>
-            <div className={styles.progressFillGray}></div>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
+
 
   return (
     <div className={styles.pageWrapper}>
 
-      {Header}
+      <HeaderSimple />
 
       <div className={styles.bg}>
         <div className={styles.card}>

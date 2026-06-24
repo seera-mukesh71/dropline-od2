@@ -1,4 +1,6 @@
 'use client';
+import HeaderWithApp from '../components/HeaderWithApp';
+
 
 import { useState, useEffect } from 'react';
 import { useRouter }           from 'next/navigation';
@@ -50,40 +52,7 @@ export default function CongratulationsPage() {
     <div className={styles.pageWrapper}>
 
       {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-
-          {/* Left: Logo */}
-          <div className={styles.logoGroup}>
-            <img
-              src="/icici-logo.png"
-              alt="ICICI Bank"
-              className={styles.iciciLogo}
-            />
-            <div className={styles.headerDivider}></div>
-            <div className={styles.headerBrandBlock}>
-              <span className={styles.brandName}>Dropline OD</span>
-              <span className={styles.brandSub}>Unsecured Overdraft Facility</span>
-            </div>
-          </div>
-
-          {/* Right: Application number box */}
-          <div className={styles.appNumBox}>
-            <span className={styles.appNumLabel}>Application Number</span>
-            <div className={styles.appNumRow}>
-              <span className={styles.appNumValue}>{appNumber}</span>
-              <button
-                className={styles.copyBtn}
-                onClick={handleCopy}
-                title="Copy application number"
-              >
-                {copied ? '✓' : '⧉'}
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </header>
+      <HeaderWithApp appNumber={appNumber} />
 
       {/* ── RED HERO SECTION ──────────────────────────────────────────── */}
       <section className={styles.hero}>

@@ -1,5 +1,6 @@
-'use client';
 
+'use client';
+import HeaderWithApp from '../components/HeaderWithApp';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter }                                  from 'next/navigation';
 import styles                                         from './sanction.module.css';
@@ -225,29 +226,7 @@ export default function SanctionPage() {
     <div className={styles.pageWrapper}>
 
       {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-          <div className={styles.headerLeft}>
-            <div className={styles.logoICICI}>
-              <img
-                src="/icici-logo.png"
-                alt="ICICI Bank"
-                className={styles.iciciLogoImg}
-              />
-            </div>
-            <div className={styles.headerDivider}></div>
-            <div className={styles.logoDropline}>
-              <span className={styles.dlText}>Dropline</span>
-              <span className={styles.odBadge}>OD</span>
-              <span className={styles.unsecBadge}>Unsecured</span>
-            </div>
-          </div>
-          <div className={styles.headerRight}>
-            <span className={styles.appLabel}>Application Number</span>
-            <span className={styles.appValue}>{appNumber}</span>
-          </div>
-        </div>
-      </header>
+      <HeaderWithApp appNumber={appNumber} />
 
       {/* ── RED NAV BAR ──────────────────────────────────────────────── */}
       <nav className={styles.navBar}>

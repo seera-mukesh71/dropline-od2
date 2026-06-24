@@ -6,33 +6,12 @@
 }
 
 /* ── Header ───────────────────────────────────────────── */
-.header {
-  background: #fff;
-  border-bottom: 1px solid #e8e8e8;
-  padding: 12px 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-}
 
-.headerInner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
 
-.logoGroup {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
-.logoICICI {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+
+
+
 
 .iciciLogoImg {
   height: 32px;
@@ -41,44 +20,8 @@
   display: block;
 }
 
-.dividerLine {
-  width: 1px;
-  height: 28px;
-  background: #ddd;
-}
 
-.logoDropline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
 
-.droplineText {
-  font-size: 16px;
-  font-weight: 700;
-  color: #E8541A;
-}
-
-.odBadge {
-  background: #E8541A;
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-}
-
-.unsecuredBadge {
-  background: #C8102E;
-  color: white;
-  font-size: 9px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
 
 /* ── Hero Banner ──────────────────────────────────────── */
 .hero {

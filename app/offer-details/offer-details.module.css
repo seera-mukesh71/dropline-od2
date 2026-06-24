@@ -17,41 +17,15 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ── Header ───────────────────────────────────────────── */
-.header {
-  background: #fff;
-  border-bottom: 1px solid #e8e8e8;
-  padding: 12px 0;
-  position: sticky; top: 0; z-index: 50;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-}
-.headerInner {
-  max-width: 1100px; margin: 0 auto; padding: 0 24px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.logoGroup   { display: flex; align-items: center; gap: 12px; }
-.logoICICI   { display: flex; align-items: center; gap: 6px; }
 .iciciLogoImg {
   height: 32px;
   width: auto;
   object-fit: contain;
   display: block;
 }
-.headerDivider { width: 1px; height: 28px; background: #ddd; }
-.logoDropline  { display: flex; align-items: center; gap: 6px; }
-.dlText        { font-size: 16px; font-weight: 700; color: #E84E20; }
-.odBadge       {
-  background: #E84E20; color: #fff; font-size: 11px; font-weight: 700;
-  padding: 2px 7px; border-radius: 4px;
-}
-.unsecBadge    {
-  background: #C8102E; color: #fff; font-size: 9px; font-weight: 600;
-  padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.3px;
-}
 
-/* Application number */
-.appNum      { font-size: 13px; color: #555; font-weight: 500; }
-.appNumValue { font-weight: 700; color: #E84E20; letter-spacing: 0.3px; }
+
+
 
 /* ── Red Background ───────────────────────────────────── */
 .bg {

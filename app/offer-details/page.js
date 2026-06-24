@@ -1,5 +1,6 @@
-'use client';
 
+'use client';
+import HeaderWithApp from '../components/HeaderWithApp';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter }                         from 'next/navigation';
 import styles                                from './offer-details.module.css';
@@ -87,28 +88,7 @@ export default function OfferDetailsPage() {
     <div className={styles.pageWrapper}>
 
       {/* ── HEADER ───────────────────────────────────────────────────── */}
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-          {/* Logo */}
-          <div className={styles.logoGroup}>
-            <div className={styles.logoICICI}>
-              <img src="/icici-logo.png" alt="ICICI Bank" className={styles.iciciLogoImg} />
-            </div>
-            <div className={styles.headerDivider}></div>
-            <div className={styles.logoDropline}>
-              <span className={styles.dlText}>Dropline</span>
-              <span className={styles.odBadge}>OD</span>
-              <span className={styles.unsecBadge}>Unsecured</span>
-            </div>
-          </div>
-
-          {/* Application number — top right */}
-          <div className={styles.appNum}>
-            Application Number:&nbsp;
-            <span className={styles.appNumValue}>{appNumber}</span>
-          </div>
-        </div>
-      </header>
+      <HeaderWithApp appNumber={appNumber} />
 
       {/* ── RED BACKGROUND WRAPPER ────────────────────────────────────── */}
       <div className={styles.bg}>

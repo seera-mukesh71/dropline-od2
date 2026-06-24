@@ -1,4 +1,6 @@
 'use client';
+import HeaderWithApp from '../components/HeaderWithApp';
+
 
 import { useState, useEffect } from 'react';
 import { useRouter }           from 'next/navigation';
@@ -146,21 +148,7 @@ export default function DashboardPage() {
     <div className={styles.pageWrapper}>
 
       {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-          <div className={styles.logoGroup}>
-            <div className={styles.logoICICI}>
-              <img src="/icici-logo.png" alt="ICICI Bank" className={styles.iciciLogoImg} />
-            </div>
-            <div className={styles.headerDivider}></div>
-            <div className={styles.logoDropline}>
-              <span className={styles.dlText}>Dropline</span>
-              <span className={styles.odBadge}>OD</span>
-              <span className={styles.unsecBadge}>Unsecured</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <HeaderWithApp appNumber={appNumber} />
 
       {/* ── RED NAV BAR ──────────────────────────────────────────────── */}
       <nav className={styles.navBar}>
