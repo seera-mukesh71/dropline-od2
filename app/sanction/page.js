@@ -96,7 +96,7 @@ export default function SanctionPage() {
       const blob = await res.blob();
       const url  = URL.createObjectURL(blob);
       setPdfUrl(url);
-      setPdfReadTimer(15);
+      setPdfReadTimer(5);
     } catch (err) {
       console.error(err);
       setPdfModal(null);

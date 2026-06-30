@@ -6,10 +6,10 @@ import { useRouter }                         from 'next/navigation';
 import styles                                from './offer-details.module.css';
 
 // ── Constants (same for everyone) ────────────────────────────────────────
-const TENURE_MONTHS  = 12;
+const TENURE_MONTHS  = 36;
 const VALIDITY       = '1 Year';
-const INTEREST_RATE  = 16.9;
-const PROCESSING_FEE = 2.00;
+const INTEREST_RATE  = 13.9;
+const PROCESSING_FEE = 1.5;
 const MIN_AMOUNT     = 100000;   // ₹1,00,000
 const STEP           = 1000;     // slider steps of ₹1000
 

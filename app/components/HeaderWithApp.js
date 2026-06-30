@@ -1,19 +1,7 @@
 // Shared header with application number — used on Offer Details, Sanction, Congratulations, Dashboard
-'use client';
-
-import { useState } from 'react';
-import styles       from './Header.module.css';
+import styles from './Header.module.css';
 
 export default function HeaderWithApp({ appNumber }) {
-  const [copied, setCopied] = useState(false);
-
-  function handleCopy() {
-    navigator.clipboard.writeText(appNumber || '').then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  }
-
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
@@ -26,20 +14,11 @@ export default function HeaderWithApp({ appNumber }) {
           </div>
         </div>
 
-        {/* Application number box — right side */}
+        {/* Application number — plain text, no copy button */}
         {appNumber && (
           <div className={styles.appNumBox}>
             <span className={styles.appNumLabel}>Application Number</span>
-            <div className={styles.appNumRow}>
-              <span className={styles.appNumValue}>{appNumber}</span>
-              <button
-                className={styles.copyBtn}
-                onClick={handleCopy}
-                title="Copy application number"
-              >
-                {copied ? '✓' : '⧉'}
-              </button>
-            </div>
+            <span className={styles.appNumValue}>{appNumber}</span>
           </div>
         )}
       </div>
