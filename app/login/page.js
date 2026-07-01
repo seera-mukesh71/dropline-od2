@@ -46,6 +46,11 @@ const CaptchaRenderer = memo(function CaptchaRenderer({ code }) {
 export default function LoginPage() {
   const router = useRouter();
 
+  useEffect(() => {
+    window.__chatbotPage = 'login';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'login' } }));
+  }, []);
+
   // ── tabs ──────────────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState('corporate');
 
@@ -220,333 +225,335 @@ export default function LoginPage() {
 
 
   return (
-    <div className={styles.pageWrapper}>
+    <>
+      <div className={styles.pageWrapper}>
 
-      <HeaderSimple />
+        <HeaderSimple />
 
-      <div className={styles.bg}>
-        <div className={styles.card}>
+        <div className={styles.bg}>
+          <div className={styles.card}>
 
-          {/* Back */}
-          <button className={styles.backBtn} onClick={() => router.push('/')}>
-            <span className={styles.backChevron}>‹</span> Back
-          </button>
+            {/* Back */}
+            <button className={styles.backBtn} onClick={() => router.push('/')}>
+              <span className={styles.backChevron}>‹</span> Back
+            </button>
 
-          {/* Title */}
-          <div className={styles.cardHeader}>
-            <h1 className={styles.title}>
-              Apply for <span className={styles.titleOrange}>Dropline OD</span>
-            </h1>
-            <div className={styles.tagline}>
-              <span>🤝 Easy</span>
-              <span className={styles.pipe}>|</span>
-              <span>⚡ Quick</span>
-              <span className={styles.pipe}>|</span>
-              <span>🛡 Secure</span>
+            {/* Title */}
+            <div className={styles.cardHeader}>
+              <h1 className={styles.title}>
+                Apply for <span className={styles.titleOrange}>Dropline OD</span>
+              </h1>
+              <div className={styles.tagline}>
+                <span>🤝 Easy</span>
+                <span className={styles.pipe}>|</span>
+                <span>⚡ Quick</span>
+                <span className={styles.pipe}>|</span>
+                <span>🛡 Secure</span>
+              </div>
             </div>
-          </div>
 
-          {/* ── TABS ─────────────────────────────────────────────────── */}
-          <div className={styles.tabs}>
-            <button
-              className={`${styles.tab} ${activeTab === 'corporate' ? styles.tabActive : ''}`}
-              onClick={() => switchTab('corporate')}
-            >
-              Corporate Internet Banking
-            </button>
-            <button
-              className={`${styles.tab} ${activeTab === 'debit' ? styles.tabActive : ''}`}
-              onClick={() => switchTab('debit')}
-            >
-              Debit Card
-            </button>
-          </div>
+            {/* ── TABS ─────────────────────────────────────────────────── */}
+            <div className={styles.tabs}>
+              <button
+                className={`${styles.tab} ${activeTab === 'corporate' ? styles.tabActive : ''}`}
+                onClick={() => switchTab('corporate')}
+              >
+                Corporate Internet Banking
+              </button>
+              <button
+                className={`${styles.tab} ${activeTab === 'debit' ? styles.tabActive : ''}`}
+                onClick={() => switchTab('debit')}
+              >
+                Debit Card
+              </button>
+            </div>
 
-          {/* Global error */}
-          {error && <div className={styles.globalError}>⚠ {error}</div>}
+            {/* Global error */}
+            {error && <div className={styles.globalError}>⚠ {error}</div>}
 
-          {/* ════════════════════════════════════════════════════════════
-              CORPORATE INTERNET BANKING FORM
-          ════════════════════════════════════════════════════════════ */}
-          {activeTab === 'corporate' && (
-            <form onSubmit={handleCorporateLogin} noValidate>
+            {/* ════════════════════════════════════════════════════════════
+                CORPORATE INTERNET BANKING FORM
+            ════════════════════════════════════════════════════════════ */}
+            {activeTab === 'corporate' && (
+              <form onSubmit={handleCorporateLogin} noValidate>
 
-              <div className={styles.row}>
-                {/* User ID */}
-                <div className={styles.field}>
-                  <label className={styles.label}>
-                    Customer ID / User ID <span className={styles.req}>*</span>
-                  </label>
-                  <div className={`${styles.inputWrap} ${fieldErr.userId ? styles.inputError : ''}`}>
-                    <span className={styles.inputIcon}>👤</span>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      placeholder="Enter Customer ID / User ID"
-                      value={userId}
-                      onChange={e => { setUserId(e.target.value); setFieldErr(p => ({ ...p, userId: '' })); }}
-                      autoComplete="username"
-                    />
+                <div className={styles.row}>
+                  {/* User ID */}
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Customer ID / User ID <span className={styles.req}>*</span>
+                    </label>
+                    <div className={`${styles.inputWrap} ${fieldErr.userId ? styles.inputError : ''}`}>
+                      <span className={styles.inputIcon}>👤</span>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        placeholder="Enter Customer ID / User ID"
+                        value={userId}
+                        onChange={e => { setUserId(e.target.value); setFieldErr(p => ({ ...p, userId: '' })); }}
+                        autoComplete="username"
+                      />
+                    </div>
+                    {fieldErr.userId && <p className={styles.fieldErrMsg}>{fieldErr.userId}</p>}
                   </div>
-                  {fieldErr.userId && <p className={styles.fieldErrMsg}>{fieldErr.userId}</p>}
+
+                  {/* Password */}
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Password <span className={styles.req}>*</span>
+                    </label>
+                    <div className={`${styles.inputWrap} ${fieldErr.password ? styles.inputError : ''}`}>
+                      <span className={styles.inputIcon}>🔒</span>
+                      <input
+                        type={showPwd ? 'text' : 'password'}
+                        className={styles.input}
+                        placeholder="Enter Password"
+                        value={password}
+                        onChange={e => { setPassword(e.target.value); setFieldErr(p => ({ ...p, password: '' })); }}
+                        autoComplete="current-password"
+                      />
+                      <button
+                        type="button"
+                        className={styles.eyeBtn}
+                        onClick={() => setShowPwd(v => !v)}
+                        aria-label={showPwd ? 'Hide password' : 'Show password'}
+                      >
+                        {showPwd ? '🙈' : '👁'}
+                      </button>
+                    </div>
+                    {fieldErr.password && <p className={styles.fieldErrMsg}>{fieldErr.password}</p>}
+                  </div>
                 </div>
 
-                {/* Password */}
-                <div className={styles.field}>
+                {/* CAPTCHA — inlined directly, NOT inside a sub-component */}
+                <div className={styles.captchaSection}>
                   <label className={styles.label}>
-                    Password <span className={styles.req}>*</span>
+                    CAPTCHA <span className={styles.req}>*</span>
                   </label>
-                  <div className={`${styles.inputWrap} ${fieldErr.password ? styles.inputError : ''}`}>
-                    <span className={styles.inputIcon}>🔒</span>
-                    <input
-                      type={showPwd ? 'text' : 'password'}
-                      className={styles.input}
-                      placeholder="Enter Password"
-                      value={password}
-                      onChange={e => { setPassword(e.target.value); setFieldErr(p => ({ ...p, password: '' })); }}
-                      autoComplete="current-password"
-                    />
+                  <div className={styles.captchaRow}>
+                    <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
+                      <span className={styles.inputIcon}>🛡</span>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        placeholder="Enter CAPTCHA"
+                        value={captchaInput}
+                        onChange={e => {
+                          setCaptchaInput(e.target.value);
+                          setFieldErr(p => ({ ...p, captcha: '' }));
+                        }}
+                        maxLength={6}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck={false}
+                      />
+                    </div>
                     <button
                       type="button"
-                      className={styles.eyeBtn}
-                      onClick={() => setShowPwd(v => !v)}
-                      aria-label={showPwd ? 'Hide password' : 'Show password'}
+                      className={styles.refreshBtn}
+                      onClick={refreshCaptcha}
+                      title="Refresh CAPTCHA"
                     >
-                      {showPwd ? '🙈' : '👁'}
+                      ↻
                     </button>
+                    <div className={styles.captchaDisplay} aria-hidden="true">
+                      <CaptchaRenderer code={captchaCode} />
+                    </div>
                   </div>
-                  {fieldErr.password && <p className={styles.fieldErrMsg}>{fieldErr.password}</p>}
+                  {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
                 </div>
-              </div>
 
-              {/* CAPTCHA — inlined directly, NOT inside a sub-component */}
-              <div className={styles.captchaSection}>
-                <label className={styles.label}>
-                  CAPTCHA <span className={styles.req}>*</span>
-                </label>
-                <div className={styles.captchaRow}>
-                  <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
-                    <span className={styles.inputIcon}>🛡</span>
+                {/* Confirm checkbox */}
+                <div className={styles.confirmRow}>
+                  <label className={styles.checkLabel}>
                     <input
-                      type="text"
-                      className={styles.input}
-                      placeholder="Enter CAPTCHA"
-                      value={captchaInput}
+                      type="checkbox"
+                      className={styles.checkbox}
+                      checked={confirmed}
                       onChange={e => {
-                        setCaptchaInput(e.target.value);
-                        setFieldErr(p => ({ ...p, captcha: '' }));
+                        setConfirmed(e.target.checked);
+                        setFieldErr(p => ({ ...p, confirm: '' }));
                       }}
-                      maxLength={6}
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck={false}
                     />
-                  </div>
+                    <span className={styles.checkText}>
+                      <em>I confirm that the credentials mentioned above are correct.</em>
+                    </span>
+                  </label>
+                  {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
+                </div>
+
+                {/* Login button */}
+                <button type="submit" className={styles.loginBtn} disabled={loading}>
+                  {loading
+                    ? <span className={styles.spinner}></span>
+                    : <>Login <span className={styles.loginArrow}>›</span></>
+                  }
+                </button>
+
+                {/* Forgot password */}
+                <div className={styles.forgotWrap}>
                   <button
                     type="button"
-                    className={styles.refreshBtn}
-                    onClick={refreshCaptcha}
-                    title="Refresh CAPTCHA"
+                    className={styles.forgotBtn}
+                    onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}
                   >
-                    ↻
+                    Forgot Password?
                   </button>
-                  <div className={styles.captchaDisplay} aria-hidden="true">
-                    <CaptchaRenderer code={captchaCode} />
-                  </div>
-                </div>
-                {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
-              </div>
-
-              {/* Confirm checkbox */}
-              <div className={styles.confirmRow}>
-                <label className={styles.checkLabel}>
-                  <input
-                    type="checkbox"
-                    className={styles.checkbox}
-                    checked={confirmed}
-                    onChange={e => {
-                      setConfirmed(e.target.checked);
-                      setFieldErr(p => ({ ...p, confirm: '' }));
-                    }}
-                  />
-                  <span className={styles.checkText}>
-                    <em>I confirm that the credentials mentioned above are correct.</em>
-                  </span>
-                </label>
-                {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
-              </div>
-
-              {/* Login button */}
-              <button type="submit" className={styles.loginBtn} disabled={loading}>
-                {loading
-                  ? <span className={styles.spinner}></span>
-                  : <>Login <span className={styles.loginArrow}>›</span></>
-                }
-              </button>
-
-              {/* Forgot password */}
-              <div className={styles.forgotWrap}>
-                <button
-                  type="button"
-                  className={styles.forgotBtn}
-                  onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}
-                >
-                  Forgot Password?
-                </button>
-              </div>
-
-              {/* Security note */}
-              <div className={styles.secNote}>
-                <span className={styles.secIcon}>🛡</span>
-                <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
-              </div>
-
-            </form>
-          )}
-
-          {/* ════════════════════════════════════════════════════════════
-              DEBIT CARD FORM
-          ════════════════════════════════════════════════════════════ */}
-          {activeTab === 'debit' && (
-            <form onSubmit={handleDebitLogin} noValidate>
-
-              <div className={styles.row}>
-                {/* Card Number */}
-                <div className={styles.field}>
-                  <label className={styles.label}>
-                    Debit Card Number <span className={styles.req}>*</span>
-                  </label>
-                  <div className={`${styles.inputWrap} ${fieldErr.cardNumber ? styles.inputError : ''}`}>
-                    <span className={styles.inputIcon}>💳</span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      className={styles.input}
-                      placeholder="Enter 16 Digit Debit Card Number"
-                      value={cardNumber}
-                      onChange={handleCardInput}
-                      maxLength={19}
-                      autoComplete="cc-number"
-                    />
-                  </div>
-                  {fieldErr.cardNumber && <p className={styles.fieldErrMsg}>{fieldErr.cardNumber}</p>}
                 </div>
 
-                {/* PIN — 4 separate boxes */}
-                <div className={styles.field}>
-                  <label className={styles.label}>
-                    PIN <span className={styles.req}>*</span>
-                  </label>
-                  <div className={styles.pinRow}>
-                    {pin.map((digit, i) => (
+                {/* Security note */}
+                <div className={styles.secNote}>
+                  <span className={styles.secIcon}>🛡</span>
+                  <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
+                </div>
+
+              </form>
+            )}
+
+            {/* ════════════════════════════════════════════════════════════
+                DEBIT CARD FORM
+            ════════════════════════════════════════════════════════════ */}
+            {activeTab === 'debit' && (
+              <form onSubmit={handleDebitLogin} noValidate>
+
+                <div className={styles.row}>
+                  {/* Card Number */}
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Debit Card Number <span className={styles.req}>*</span>
+                    </label>
+                    <div className={`${styles.inputWrap} ${fieldErr.cardNumber ? styles.inputError : ''}`}>
+                      <span className={styles.inputIcon}>💳</span>
                       <input
-                        key={i}
-                        id={`pin-${i}`}
-                        type="password"
+                        type="text"
                         inputMode="numeric"
-                        maxLength={1}
-                        className={`${styles.pinBox} ${fieldErr.pin ? styles.pinBoxError : ''}`}
-                        value={digit}
-                        onChange={e => handlePinChange(i, e.target.value)}
-                        onKeyDown={e => handlePinKeyDown(i, e)}
-                        autoComplete="off"
-                        aria-label={`PIN digit ${i + 1}`}
+                        className={styles.input}
+                        placeholder="Enter 16 Digit Debit Card Number"
+                        value={cardNumber}
+                        onChange={handleCardInput}
+                        maxLength={19}
+                        autoComplete="cc-number"
                       />
-                    ))}
+                    </div>
+                    {fieldErr.cardNumber && <p className={styles.fieldErrMsg}>{fieldErr.cardNumber}</p>}
                   </div>
-                  {fieldErr.pin && <p className={styles.fieldErrMsg}>{fieldErr.pin}</p>}
-                </div>
-              </div>
 
-              {/* CAPTCHA — inlined directly, NOT inside a sub-component */}
-              <div className={styles.captchaSection}>
-                <label className={styles.label}>
-                  CAPTCHA <span className={styles.req}>*</span>
-                </label>
-                <div className={styles.captchaRow}>
-                  <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
-                    <span className={styles.inputIcon}>🛡</span>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      placeholder="Enter CAPTCHA"
-                      value={captchaInput}
-                      onChange={e => {
-                        setCaptchaInput(e.target.value);
-                        setFieldErr(p => ({ ...p, captcha: '' }));
-                      }}
-                      maxLength={6}
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck={false}
-                    />
+                  {/* PIN — 4 separate boxes */}
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      PIN <span className={styles.req}>*</span>
+                    </label>
+                    <div className={styles.pinRow}>
+                      {pin.map((digit, i) => (
+                        <input
+                          key={i}
+                          id={`pin-${i}`}
+                          type="password"
+                          inputMode="numeric"
+                          maxLength={1}
+                          className={`${styles.pinBox} ${fieldErr.pin ? styles.pinBoxError : ''}`}
+                          value={digit}
+                          onChange={e => handlePinChange(i, e.target.value)}
+                          onKeyDown={e => handlePinKeyDown(i, e)}
+                          autoComplete="off"
+                          aria-label={`PIN digit ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+                    {fieldErr.pin && <p className={styles.fieldErrMsg}>{fieldErr.pin}</p>}
                   </div>
+                </div>
+
+                {/* CAPTCHA — inlined directly, NOT inside a sub-component */}
+                <div className={styles.captchaSection}>
+                  <label className={styles.label}>
+                    CAPTCHA <span className={styles.req}>*</span>
+                  </label>
+                  <div className={styles.captchaRow}>
+                    <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
+                      <span className={styles.inputIcon}>🛡</span>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        placeholder="Enter CAPTCHA"
+                        value={captchaInput}
+                        onChange={e => {
+                          setCaptchaInput(e.target.value);
+                          setFieldErr(p => ({ ...p, captcha: '' }));
+                        }}
+                        maxLength={6}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck={false}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.refreshBtn}
+                      onClick={refreshCaptcha}
+                      title="Refresh CAPTCHA"
+                    >
+                      ↻
+                    </button>
+                    <div className={styles.captchaDisplay} aria-hidden="true">
+                      <CaptchaRenderer code={captchaCode} />
+                    </div>
+                  </div>
+                  {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
+                </div>
+
+                {/* Confirm checkbox */}
+                <div className={styles.confirmRow}>
+                  <label className={styles.checkLabel}>
+                    <input
+                      type="checkbox"
+                      className={styles.checkbox}
+                      checked={confirmed}
+                      onChange={e => {
+                        setConfirmed(e.target.checked);
+                        setFieldErr(p => ({ ...p, confirm: '' }));
+                      }}
+                    />
+                    <span className={styles.checkText}>
+                      <em>I confirm that the credentials mentioned above are correct.</em>
+                    </span>
+                  </label>
+                  {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
+                </div>
+
+                {/* Login button */}
+                <button type="submit" className={styles.loginBtn} disabled={loading}>
+                  {loading
+                    ? <span className={styles.spinner}></span>
+                    : <>Login <span className={styles.loginArrow}>›</span></>
+                  }
+                </button>
+
+                {/* Forgot password */}
+                <div className={styles.forgotWrap}>
                   <button
                     type="button"
-                    className={styles.refreshBtn}
-                    onClick={refreshCaptcha}
-                    title="Refresh CAPTCHA"
+                    className={styles.forgotBtn}
+                    onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}
                   >
-                    ↻
+                    Forgot Password?
                   </button>
-                  <div className={styles.captchaDisplay} aria-hidden="true">
-                    <CaptchaRenderer code={captchaCode} />
-                  </div>
                 </div>
-                {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
-              </div>
 
-              {/* Confirm checkbox */}
-              <div className={styles.confirmRow}>
-                <label className={styles.checkLabel}>
-                  <input
-                    type="checkbox"
-                    className={styles.checkbox}
-                    checked={confirmed}
-                    onChange={e => {
-                      setConfirmed(e.target.checked);
-                      setFieldErr(p => ({ ...p, confirm: '' }));
-                    }}
-                  />
-                  <span className={styles.checkText}>
-                    <em>I confirm that the credentials mentioned above are correct.</em>
-                  </span>
-                </label>
-                {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
-              </div>
+                {/* Security note */}
+                <div className={styles.secNote}>
+                  <span className={styles.secIcon}>🛡</span>
+                  <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
+                </div>
 
-              {/* Login button */}
-              <button type="submit" className={styles.loginBtn} disabled={loading}>
-                {loading
-                  ? <span className={styles.spinner}></span>
-                  : <>Login <span className={styles.loginArrow}>›</span></>
-                }
-              </button>
+              </form>
+            )}
 
-              {/* Forgot password */}
-              <div className={styles.forgotWrap}>
-                <button
-                  type="button"
-                  className={styles.forgotBtn}
-                  onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}
-                >
-                  Forgot Password?
-                </button>
-              </div>
-
-              {/* Security note */}
-              <div className={styles.secNote}>
-                <span className={styles.secIcon}>🛡</span>
-                <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
-              </div>
-
-            </form>
-          )}
-
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

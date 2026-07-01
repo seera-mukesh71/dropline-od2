@@ -7,6 +7,11 @@ import styles                          from './policies.module.css';
 
 export default function PoliciesPage() {
   const router    = useRouter();
+
+  useEffect(() => {
+    window.__chatbotPage = 'policy';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'policy' } }));
+  }, []);
   const scrollRef = useRef(null);
 
   // ── Customer from session ─────────────────────────────────────────────
@@ -93,6 +98,7 @@ export default function PoliciesPage() {
   if (!customer) return null;
 
   return (
+    <>
     <div className={styles.pageWrapper}>
 
       {/* ── HEADER ───────────────────────────────────────────────────── */}
@@ -406,5 +412,6 @@ export default function PoliciesPage() {
       )}
 
     </div>
+    </>
   );
 }

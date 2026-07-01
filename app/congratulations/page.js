@@ -29,6 +29,11 @@ export default function CongratulationsPage() {
   const [copied,    setCopied]    = useState(false);
 
   useEffect(() => {
+    window.__chatbotPage = 'congrats';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'congrats' } }));
+  }, []);
+
+  useEffect(() => {
     const s = sessionStorage.getItem('odCustomer');
     if (!s) { router.push('/'); return; }
     setCustomer(JSON.parse(s));
@@ -49,6 +54,7 @@ export default function CongratulationsPage() {
   const sanctionedAmount = customer.finalAmount || customer.offerAmount || 0;
 
   return (
+    <>
     <div className={styles.pageWrapper}>
 
       {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
@@ -190,5 +196,6 @@ export default function CongratulationsPage() {
       </div>
 
     </div>
+    </>
   );
 }

@@ -78,6 +78,11 @@ export default function DashboardPage() {
   const [appNumber,   setAppNumber]   = useState('');
   const [actionHover, setActionHover] = useState(null);
 
+  useEffect(() => {
+    window.__chatbotPage = 'dashboard';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'dashboard' } }));
+  }, []);
+
   // Simulated OD usage — in real app this comes from DB
   const [usedAmount, setUsedAmount] = useState(0);
   const [daysElapsed, setDaysElapsed] = useState(0);
@@ -145,6 +150,7 @@ export default function DashboardPage() {
   ];
 
   return (
+    <>
     <div className={styles.pageWrapper}>
 
       {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
@@ -300,5 +306,6 @@ export default function DashboardPage() {
 
       </div>
     </div>
+    </>
   );
 }

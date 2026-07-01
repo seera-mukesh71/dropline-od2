@@ -8,6 +8,11 @@ import styles                                         from './sanction.module.cs
 export default function SanctionPage() {
   const router = useRouter();
 
+  useEffect(() => {
+    window.__chatbotPage = 'esign';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'esign' } }));
+  }, []);
+
   // ── Session ───────────────────────────────────────────────────────────
   const [customer,  setCustomer]  = useState(null);
   const [appNumber, setAppNumber] = useState('');
@@ -223,6 +228,7 @@ export default function SanctionPage() {
   const displayAmount = customer.finalAmount || customer.offerAmount;
 
   return (
+    <>
     <div className={styles.pageWrapper}>
 
       {/* ── WHITE HEADER ─────────────────────────────────────────────── */}
@@ -505,5 +511,6 @@ export default function SanctionPage() {
       )}
 
     </div>
+    </>
   );
 }

@@ -27,6 +27,11 @@ function formatINR(num) {
 export default function OfferDetailsPage() {
   const router = useRouter();
 
+  useEffect(() => {
+    window.__chatbotPage = 'offer';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'offer' } }));
+  }, []);
+
   // ── Session data ──────────────────────────────────────────────────────
   const [customer,   setCustomer]   = useState(null);
   const [appNumber,  setAppNumber]  = useState('');
@@ -85,6 +90,7 @@ export default function OfferDetailsPage() {
   }
 
   return (
+    <>
     <div className={styles.pageWrapper}>
 
       {/* ── HEADER ───────────────────────────────────────────────────── */}
@@ -257,5 +263,6 @@ export default function OfferDetailsPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
