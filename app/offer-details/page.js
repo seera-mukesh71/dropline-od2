@@ -16,7 +16,7 @@ const STEP           = 1000;     // slider steps of ₹1000
 // ── Application Number generator ─────────────────────────────────────────
 function generateAppNumber() {
   const num = Math.floor(10000 + Math.random() * 90000);
-  return `CAODE0${num}`;
+  return `DLOD0${num}`;
 }
 
 // ── Format ₹ in Indian system ─────────────────────────────────────────────
