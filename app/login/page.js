@@ -1,9 +1,9 @@
-
 'use client';
+
 import HeaderSimple from '../components/HeaderSimple';
 import { useState, useEffect, useCallback, memo } from 'react';
-import { useRouter }                               from 'next/navigation';
-import styles                                      from './login.module.css';
+import { useRouter } from 'next/navigation';
+import styles from './login.module.css';
 
 // ── CAPTCHA generator ─────────────────────────────────────────────────────
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
@@ -13,31 +13,25 @@ function makeCaptcha(len = 6) {
   ).join('');
 }
 
-// ── Memoized CAPTCHA display — only re-renders when code changes ──────────
+// ── Memoized CAPTCHA display ──────────────────────────────────────────────
 const CaptchaRenderer = memo(function CaptchaRenderer({ code }) {
   const chars     = code.split('');
   const colors    = ['#C62828', '#1565C0', '#2E7D32', '#6A1B9A', '#E65100', '#1a1a1a'];
   const rotations = [-15, 8, -5, 12, -10, 6];
   const sizes     = [22, 20, 24, 19, 22, 21];
-
   return (
     <div className={styles.captchaChars}>
       {chars.map((ch, i) => (
-        <span
-          key={i}
-          style={{
-            color:      colors[i % colors.length],
-            transform:  `rotate(${rotations[i % rotations.length]}deg)`,
-            fontSize:   `${sizes[i % sizes.length]}px`,
-            fontWeight: 800,
-            fontFamily: i % 2 === 0 ? 'Georgia, serif' : 'Arial, sans-serif',
-            display:    'inline-block',
-            userSelect: 'none',
-            lineHeight: 1,
-          }}
-        >
-          {ch}
-        </span>
+        <span key={i} style={{
+          color:      colors[i % colors.length],
+          transform:  `rotate(${rotations[i % rotations.length]}deg)`,
+          fontSize:   `${sizes[i % sizes.length]}px`,
+          fontWeight: 800,
+          fontFamily: i % 2 === 0 ? 'Georgia, serif' : 'Arial, sans-serif',
+          display:    'inline-block',
+          userSelect: 'none',
+          lineHeight: 1,
+        }}>{ch}</span>
       ))}
     </div>
   );
@@ -46,32 +40,36 @@ const CaptchaRenderer = memo(function CaptchaRenderer({ code }) {
 export default function LoginPage() {
   const router = useRouter();
 
+  // ── Account type overlay — shown on load ──────────────────────────────
+  const [accountOverlay, setAccountOverlay] = useState(true);
+  const [savingsMsg,     setSavingsMsg]     = useState(false);
+
   useEffect(() => {
     window.__chatbotPage = 'login';
     window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'login' } }));
   }, []);
 
-  // ── tabs ──────────────────────────────────────────────────────────────
+  // ── Tabs ───────────────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState('corporate');
 
-  // ── SHARED state ──────────────────────────────────────────────────────
-  const [captchaInput, setCaptchaInput] = useState('');
-  const [captchaCode,  setCaptchaCode]  = useState('');
-  const [confirmed,    setConfirmed]    = useState(false);
-  const [loading,      setLoading]      = useState(false);
-  const [error,        setError]        = useState('');
-  const [fieldErr,     setFieldErr]     = useState({});
+  // ── Shared state ───────────────────────────────────────────────────────
+  const [captchaInput,  setCaptchaInput]  = useState('');
+  const [captchaCode,   setCaptchaCode]   = useState('');
+  const [confirmed,     setConfirmed]     = useState(false);
+  const [loading,       setLoading]       = useState(false);
+  const [error,         setError]         = useState('');
+  const [fieldErr,      setFieldErr]      = useState({});
 
-  // ── CORPORATE fields ──────────────────────────────────────────────────
+  // ── Corporate fields ───────────────────────────────────────────────────
   const [userId,   setUserId]   = useState('');
   const [password, setPassword] = useState('');
   const [showPwd,  setShowPwd]  = useState(false);
 
-  // ── DEBIT CARD fields ─────────────────────────────────────────────────
+  // ── Debit card fields ──────────────────────────────────────────────────
   const [cardNumber, setCardNumber] = useState('');
   const [pin,        setPin]        = useState(['', '', '', '']);
 
-  // ── CAPTCHA helpers ───────────────────────────────────────────────────
+  // ── CAPTCHA helpers ────────────────────────────────────────────────────
   const refreshCaptcha = useCallback(() => {
     setCaptchaCode(makeCaptcha());
     setCaptchaInput('');
@@ -80,7 +78,6 @@ export default function LoginPage() {
 
   useEffect(() => { refreshCaptcha(); }, [refreshCaptcha]);
 
-  // Reset form when switching tabs
   function switchTab(tab) {
     setActiveTab(tab);
     setError('');
@@ -90,7 +87,6 @@ export default function LoginPage() {
     refreshCaptcha();
   }
 
-  // ── Card number formatter ─────────────────────────────────────────────
   function handleCardInput(e) {
     const raw     = e.target.value.replace(/\D/g, '').slice(0, 16);
     const grouped = raw.match(/.{1,4}/g)?.join(' ') || raw;
@@ -98,16 +94,13 @@ export default function LoginPage() {
     setFieldErr(p => ({ ...p, cardNumber: '' }));
   }
 
-  // ── PIN boxes — auto-advance on digit entry ───────────────────────────
   function handlePinChange(index, value) {
     if (!/^\d?$/.test(value)) return;
     const next = [...pin];
     next[index] = value;
     setPin(next);
     setFieldErr(p => ({ ...p, pin: '' }));
-    if (value && index < 3) {
-      document.getElementById(`pin-${index + 1}`)?.focus();
-    }
+    if (value && index < 3) document.getElementById(`pin-${index + 1}`)?.focus();
   }
 
   function handlePinKeyDown(index, e) {
@@ -116,17 +109,11 @@ export default function LoginPage() {
     }
   }
 
-  // ── Shared post-login handler ─────────────────────────────────────────
   function handleLoginSuccess(customerData) {
     sessionStorage.setItem('odCustomer', JSON.stringify(customerData));
-    if (customerData.eligible) {
-      router.push('/offer');
-    } else {
-      router.push('/not-eligible');
-    }
+    router.push(customerData.eligible ? '/offer' : '/login');
   }
 
-  // ── CORPORATE validation ──────────────────────────────────────────────
   function validateCorporate() {
     const errs = {};
     if (!userId.trim())       errs.userId   = 'User ID is required.';
@@ -138,7 +125,6 @@ export default function LoginPage() {
     return errs;
   }
 
-  // ── DEBIT CARD validation ─────────────────────────────────────────────
   function validateDebit() {
     const errs  = {};
     const clean = cardNumber.replace(/\s/g, '');
@@ -153,7 +139,6 @@ export default function LoginPage() {
     return errs;
   }
 
-  // ── Corporate submit ──────────────────────────────────────────────────
   async function handleCorporateLogin(e) {
     e.preventDefault();
     setError('');
@@ -167,26 +152,18 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res  = await fetch('/api/login', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ userId: userId.trim(), password }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: userId.trim(), password }),
       });
       const data = await res.json();
-      if (!data.success) {
-        setError(data.error || 'Login failed.');
-        refreshCaptcha();
-        setLoading(false);
-        return;
-      }
+      if (!data.success) { setError(data.error || 'Login failed.'); refreshCaptcha(); setLoading(false); return; }
       handleLoginSuccess(data.customer);
     } catch (err) {
-      console.error('Corporate login error:', err);
       setError('Network error: ' + err.message);
       setLoading(false);
     }
   }
 
-  // ── Debit card submit ─────────────────────────────────────────────────
   async function handleDebitLogin(e) {
     e.preventDefault();
     setError('');
@@ -201,359 +178,286 @@ export default function LoginPage() {
     try {
       const cleanCard = cardNumber.replace(/\s/g, '');
       const pinStr    = pin.join('');
-      console.log('Sending to API:', { cardNumber: cleanCard, cardPin: pinStr });
       const res  = await fetch('/api/login-card', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ cardNumber: cleanCard, cardPin: pinStr }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cardNumber: cleanCard, cardPin: pinStr }),
       });
       const data = await res.json();
-      if (!data.success) {
-        setError(data.error || 'Login failed.');
-        refreshCaptcha();
-        setLoading(false);
-        return;
-      }
+      if (!data.success) { setError(data.error || 'Login failed.'); refreshCaptcha(); setLoading(false); return; }
       handleLoginSuccess(data.customer);
     } catch (err) {
-      console.error('Debit login fetch error:', err);
       setError('Error: ' + err.message);
       setLoading(false);
     }
   }
 
-
-
   return (
-    <>
-      <div className={styles.pageWrapper}>
+    <div className={styles.pageWrapper}>
 
-        <HeaderSimple />
+      <HeaderSimple />
 
-        <div className={styles.bg}>
-          <div className={styles.card}>
+      {/* ══════════════════════════════════════════════════════════════════
+          ACCOUNT TYPE OVERLAY — shown on page load
+      ══════════════════════════════════════════════════════════════════ */}
+      {accountOverlay && (
+        <div className={styles.overlayBackdrop}>
+          <div className={styles.overlayCard}>
 
-            {/* Back */}
-            <button className={styles.backBtn} onClick={() => router.push('/')}>
-              <span className={styles.backChevron}>‹</span> Back
-            </button>
+            {!savingsMsg ? (
+              <>
+                {/* Normal state — choose account type */}
+                <div className={styles.overlayIcon}>🏦</div>
+                <h2 className={styles.overlayTitle}>What type of account do you have?</h2>
+                <p className={styles.overlaySub}>
+                  The Dropline OD facility is available for Current Account holders only.
+                </p>
 
-            {/* Title */}
-            <div className={styles.cardHeader}>
-              <h1 className={styles.title}>
-                Apply for <span className={styles.titleOrange}>Dropline OD</span>
-              </h1>
-              <div className={styles.tagline}>
-                <span>🤝 Easy</span>
-                <span className={styles.pipe}>|</span>
-                <span>⚡ Quick</span>
-                <span className={styles.pipe}>|</span>
-                <span>🛡 Secure</span>
-              </div>
-            </div>
-
-            {/* ── TABS ─────────────────────────────────────────────────── */}
-            <div className={styles.tabs}>
-              <button
-                className={`${styles.tab} ${activeTab === 'corporate' ? styles.tabActive : ''}`}
-                onClick={() => switchTab('corporate')}
-              >
-                Corporate Internet Banking
-              </button>
-              <button
-                className={`${styles.tab} ${activeTab === 'debit' ? styles.tabActive : ''}`}
-                onClick={() => switchTab('debit')}
-              >
-                Debit Card
-              </button>
-            </div>
-
-            {/* Global error */}
-            {error && <div className={styles.globalError}>⚠ {error}</div>}
-
-            {/* ════════════════════════════════════════════════════════════
-                CORPORATE INTERNET BANKING FORM
-            ════════════════════════════════════════════════════════════ */}
-            {activeTab === 'corporate' && (
-              <form onSubmit={handleCorporateLogin} noValidate>
-
-                <div className={styles.row}>
-                  {/* User ID */}
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Customer ID / User ID <span className={styles.req}>*</span>
-                    </label>
-                    <div className={`${styles.inputWrap} ${fieldErr.userId ? styles.inputError : ''}`}>
-                      <span className={styles.inputIcon}>👤</span>
-                      <input
-                        type="text"
-                        className={styles.input}
-                        placeholder="Enter Customer ID / User ID"
-                        value={userId}
-                        onChange={e => { setUserId(e.target.value); setFieldErr(p => ({ ...p, userId: '' })); }}
-                        autoComplete="username"
-                      />
-                    </div>
-                    {fieldErr.userId && <p className={styles.fieldErrMsg}>{fieldErr.userId}</p>}
-                  </div>
-
-                  {/* Password */}
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Password <span className={styles.req}>*</span>
-                    </label>
-                    <div className={`${styles.inputWrap} ${fieldErr.password ? styles.inputError : ''}`}>
-                      <span className={styles.inputIcon}>🔒</span>
-                      <input
-                        type={showPwd ? 'text' : 'password'}
-                        className={styles.input}
-                        placeholder="Enter Password"
-                        value={password}
-                        onChange={e => { setPassword(e.target.value); setFieldErr(p => ({ ...p, password: '' })); }}
-                        autoComplete="current-password"
-                      />
-                      <button
-                        type="button"
-                        className={styles.eyeBtn}
-                        onClick={() => setShowPwd(v => !v)}
-                        aria-label={showPwd ? 'Hide password' : 'Show password'}
-                      >
-                        {showPwd ? '🙈' : '👁'}
-                      </button>
-                    </div>
-                    {fieldErr.password && <p className={styles.fieldErrMsg}>{fieldErr.password}</p>}
-                  </div>
-                </div>
-
-                {/* CAPTCHA — inlined directly, NOT inside a sub-component */}
-                <div className={styles.captchaSection}>
-                  <label className={styles.label}>
-                    CAPTCHA <span className={styles.req}>*</span>
-                  </label>
-                  <div className={styles.captchaRow}>
-                    <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
-                      <span className={styles.inputIcon}>🛡</span>
-                      <input
-                        type="text"
-                        className={styles.input}
-                        placeholder="Enter CAPTCHA"
-                        value={captchaInput}
-                        onChange={e => {
-                          setCaptchaInput(e.target.value);
-                          setFieldErr(p => ({ ...p, captcha: '' }));
-                        }}
-                        maxLength={6}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck={false}
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.refreshBtn}
-                      onClick={refreshCaptcha}
-                      title="Refresh CAPTCHA"
-                    >
-                      ↻
-                    </button>
-                    <div className={styles.captchaDisplay} aria-hidden="true">
-                      <CaptchaRenderer code={captchaCode} />
-                    </div>
-                  </div>
-                  {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
-                </div>
-
-                {/* Confirm checkbox */}
-                <div className={styles.confirmRow}>
-                  <label className={styles.checkLabel}>
-                    <input
-                      type="checkbox"
-                      className={styles.checkbox}
-                      checked={confirmed}
-                      onChange={e => {
-                        setConfirmed(e.target.checked);
-                        setFieldErr(p => ({ ...p, confirm: '' }));
-                      }}
-                    />
-                    <span className={styles.checkText}>
-                      <em>I confirm that the credentials mentioned above are correct.</em>
-                    </span>
-                  </label>
-                  {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
-                </div>
-
-                {/* Login button */}
-                <button type="submit" className={styles.loginBtn} disabled={loading}>
-                  {loading
-                    ? <span className={styles.spinner}></span>
-                    : <>Login <span className={styles.loginArrow}>›</span></>
-                  }
-                </button>
-
-                {/* Forgot password */}
-                <div className={styles.forgotWrap}>
+                <div className={styles.overlayBtns}>
+                  {/* Current — dismiss overlay and show login */}
                   <button
-                    type="button"
-                    className={styles.forgotBtn}
-                    onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}
+                    className={styles.overlayBtnCurrent}
+                    onClick={() => setAccountOverlay(false)}
                   >
-                    Forgot Password?
+                    <span className={styles.overlayBtnIcon}>🏢</span>
+                    <span className={styles.overlayBtnLabel}>Current Account</span>
+                    <span className={styles.overlayBtnArrow}>›</span>
+                  </button>
+
+                  {/* Savings — show not eligible message */}
+                  <button
+                    className={styles.overlayBtnSavings}
+                    onClick={() => setSavingsMsg(true)}
+                  >
+                    <span className={styles.overlayBtnIcon}>🏠</span>
+                    <span className={styles.overlayBtnLabel}>Savings Account</span>
+                    <span className={styles.overlayBtnArrow}>›</span>
                   </button>
                 </div>
 
-                {/* Security note */}
-                <div className={styles.secNote}>
-                  <span className={styles.secIcon}>🛡</span>
-                  <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
-                </div>
+                <button className={styles.overlayBack} onClick={() => router.push('/')}>
+                  ← Go back
+                </button>
+              </>
+            ) : (
+              <>
+                {/* Savings not eligible state */}
+                <div className={styles.overlayIconRed}>✕</div>
+                <h2 className={styles.overlayTitle}>Not Eligible</h2>
+                <p className={styles.overlaySub}>
+                  The Dropline OD facility is available only for <strong>Current Account</strong> holders.
+                  Savings accounts are not eligible for this product.
+                </p>
+                <p className={styles.overlaySub} style={{ marginTop: 8 }}>
+                  If you hold a Current Account, please go back and select the correct option.
+                </p>
 
-              </form>
-            )}
-
-            {/* ════════════════════════════════════════════════════════════
-                DEBIT CARD FORM
-            ════════════════════════════════════════════════════════════ */}
-            {activeTab === 'debit' && (
-              <form onSubmit={handleDebitLogin} noValidate>
-
-                <div className={styles.row}>
-                  {/* Card Number */}
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Debit Card Number <span className={styles.req}>*</span>
-                    </label>
-                    <div className={`${styles.inputWrap} ${fieldErr.cardNumber ? styles.inputError : ''}`}>
-                      <span className={styles.inputIcon}>💳</span>
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        className={styles.input}
-                        placeholder="Enter 16 Digit Debit Card Number"
-                        value={cardNumber}
-                        onChange={handleCardInput}
-                        maxLength={19}
-                        autoComplete="cc-number"
-                      />
-                    </div>
-                    {fieldErr.cardNumber && <p className={styles.fieldErrMsg}>{fieldErr.cardNumber}</p>}
-                  </div>
-
-                  {/* PIN — 4 separate boxes */}
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      PIN <span className={styles.req}>*</span>
-                    </label>
-                    <div className={styles.pinRow}>
-                      {pin.map((digit, i) => (
-                        <input
-                          key={i}
-                          id={`pin-${i}`}
-                          type="password"
-                          inputMode="numeric"
-                          maxLength={1}
-                          className={`${styles.pinBox} ${fieldErr.pin ? styles.pinBoxError : ''}`}
-                          value={digit}
-                          onChange={e => handlePinChange(i, e.target.value)}
-                          onKeyDown={e => handlePinKeyDown(i, e)}
-                          autoComplete="off"
-                          aria-label={`PIN digit ${i + 1}`}
-                        />
-                      ))}
-                    </div>
-                    {fieldErr.pin && <p className={styles.fieldErrMsg}>{fieldErr.pin}</p>}
-                  </div>
-                </div>
-
-                {/* CAPTCHA — inlined directly, NOT inside a sub-component */}
-                <div className={styles.captchaSection}>
-                  <label className={styles.label}>
-                    CAPTCHA <span className={styles.req}>*</span>
-                  </label>
-                  <div className={styles.captchaRow}>
-                    <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
-                      <span className={styles.inputIcon}>🛡</span>
-                      <input
-                        type="text"
-                        className={styles.input}
-                        placeholder="Enter CAPTCHA"
-                        value={captchaInput}
-                        onChange={e => {
-                          setCaptchaInput(e.target.value);
-                          setFieldErr(p => ({ ...p, captcha: '' }));
-                        }}
-                        maxLength={6}
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck={false}
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.refreshBtn}
-                      onClick={refreshCaptcha}
-                      title="Refresh CAPTCHA"
-                    >
-                      ↻
-                    </button>
-                    <div className={styles.captchaDisplay} aria-hidden="true">
-                      <CaptchaRenderer code={captchaCode} />
-                    </div>
-                  </div>
-                  {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
-                </div>
-
-                {/* Confirm checkbox */}
-                <div className={styles.confirmRow}>
-                  <label className={styles.checkLabel}>
-                    <input
-                      type="checkbox"
-                      className={styles.checkbox}
-                      checked={confirmed}
-                      onChange={e => {
-                        setConfirmed(e.target.checked);
-                        setFieldErr(p => ({ ...p, confirm: '' }));
-                      }}
-                    />
-                    <span className={styles.checkText}>
-                      <em>I confirm that the credentials mentioned above are correct.</em>
-                    </span>
-                  </label>
-                  {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
-                </div>
-
-                {/* Login button */}
-                <button type="submit" className={styles.loginBtn} disabled={loading}>
-                  {loading
-                    ? <span className={styles.spinner}></span>
-                    : <>Login <span className={styles.loginArrow}>›</span></>
-                  }
+                <button
+                  className={styles.overlayBtnCurrent}
+                  style={{ marginTop: 8 }}
+                  onClick={() => setSavingsMsg(false)}
+                >
+                  ← Select Different Account Type
                 </button>
 
-                {/* Forgot password */}
-                <div className={styles.forgotWrap}>
-                  <button
-                    type="button"
-                    className={styles.forgotBtn}
-                    onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-
-                {/* Security note */}
-                <div className={styles.secNote}>
-                  <span className={styles.secIcon}>🛡</span>
-                  <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
-                </div>
-
-              </form>
+                <button
+                  className={styles.overlayBack}
+                  onClick={() => router.push('/')}
+                >
+                  ← Go back to Home
+                </button>
+              </>
             )}
 
           </div>
         </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          LOGIN PAGE — visible behind overlay, fully interactive after dismiss
+      ══════════════════════════════════════════════════════════════════ */}
+      <div className={`${styles.bg} ${accountOverlay ? styles.bgBlurred : ''}`}>
+        <div className={styles.card}>
+
+          <button className={styles.backBtn} onClick={() => router.push('/')}>
+            <span className={styles.backChevron}>‹</span> Back
+          </button>
+
+          <div className={styles.cardHeader}>
+            <h1 className={styles.title}>
+              Apply for <span className={styles.titleOrange}>Dropline OD</span>
+            </h1>
+            <div className={styles.tagline}>
+              <span>🤝 Easy</span>
+              <span className={styles.pipe}>|</span>
+              <span>⚡ Quick</span>
+              <span className={styles.pipe}>|</span>
+              <span>🛡 Secure</span>
+            </div>
+          </div>
+
+          <div className={styles.tabs}>
+            <button
+              className={`${styles.tab} ${activeTab === 'corporate' ? styles.tabActive : ''}`}
+              onClick={() => switchTab('corporate')}
+            >
+              Corporate Internet Banking
+            </button>
+            <button
+              className={`${styles.tab} ${activeTab === 'debit' ? styles.tabActive : ''}`}
+              onClick={() => switchTab('debit')}
+            >
+              Debit Card
+            </button>
+          </div>
+
+          {error && <div className={styles.globalError}>⚠ {error}</div>}
+
+          {/* ── CORPORATE FORM ─────────────────────────────────────── */}
+          {activeTab === 'corporate' && (
+            <form onSubmit={handleCorporateLogin} noValidate>
+              <div className={styles.row}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Customer ID / User ID <span className={styles.req}>*</span></label>
+                  <div className={`${styles.inputWrap} ${fieldErr.userId ? styles.inputError : ''}`}>
+                    <span className={styles.inputIcon}>👤</span>
+                    <input type="text" className={styles.input} placeholder="Enter Customer ID / User ID"
+                      value={userId} onChange={e => { setUserId(e.target.value); setFieldErr(p => ({ ...p, userId: '' })); }}
+                      autoComplete="username" />
+                  </div>
+                  {fieldErr.userId && <p className={styles.fieldErrMsg}>{fieldErr.userId}</p>}
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Password <span className={styles.req}>*</span></label>
+                  <div className={`${styles.inputWrap} ${fieldErr.password ? styles.inputError : ''}`}>
+                    <span className={styles.inputIcon}>🔒</span>
+                    <input type={showPwd ? 'text' : 'password'} className={styles.input} placeholder="Enter Password"
+                      value={password} onChange={e => { setPassword(e.target.value); setFieldErr(p => ({ ...p, password: '' })); }}
+                      autoComplete="current-password" />
+                    <button type="button" className={styles.eyeBtn} onClick={() => setShowPwd(v => !v)}
+                      aria-label={showPwd ? 'Hide password' : 'Show password'}>
+                      {showPwd ? '🙈' : '👁'}
+                    </button>
+                  </div>
+                  {fieldErr.password && <p className={styles.fieldErrMsg}>{fieldErr.password}</p>}
+                </div>
+              </div>
+
+              <div className={styles.captchaSection}>
+                <label className={styles.label}>CAPTCHA <span className={styles.req}>*</span></label>
+                <div className={styles.captchaRow}>
+                  <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
+                    <span className={styles.inputIcon}>🛡</span>
+                    <input type="text" className={styles.input} placeholder="Enter CAPTCHA"
+                      value={captchaInput} onChange={e => { setCaptchaInput(e.target.value); setFieldErr(p => ({ ...p, captcha: '' })); }}
+                      maxLength={6} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+                  </div>
+                  <button type="button" className={styles.refreshBtn} onClick={refreshCaptcha} title="Refresh CAPTCHA">↻</button>
+                  <div className={styles.captchaDisplay} aria-hidden="true">
+                    <CaptchaRenderer code={captchaCode} />
+                  </div>
+                </div>
+                {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
+              </div>
+
+              <div className={styles.confirmRow}>
+                <label className={styles.checkLabel}>
+                  <input type="checkbox" className={styles.checkbox} checked={confirmed}
+                    onChange={e => { setConfirmed(e.target.checked); setFieldErr(p => ({ ...p, confirm: '' })); }} />
+                  <span className={styles.checkText}><em>I confirm that the credentials mentioned above are correct.</em></span>
+                </label>
+                {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
+              </div>
+
+              <button type="submit" className={styles.loginBtn} disabled={loading}>
+                {loading ? <span className={styles.spinner}></span> : <>Login <span className={styles.loginArrow}>›</span></>}
+              </button>
+              <div className={styles.forgotWrap}>
+                <button type="button" className={styles.forgotBtn}
+                  onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}>
+                  Forgot Password?
+                </button>
+              </div>
+              <div className={styles.secNote}>
+                <span className={styles.secIcon}>🛡</span>
+                <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
+              </div>
+            </form>
+          )}
+
+          {/* ── DEBIT CARD FORM ─────────────────────────────────────── */}
+          {activeTab === 'debit' && (
+            <form onSubmit={handleDebitLogin} noValidate>
+              <div className={styles.row}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Debit Card Number <span className={styles.req}>*</span></label>
+                  <div className={`${styles.inputWrap} ${fieldErr.cardNumber ? styles.inputError : ''}`}>
+                    <span className={styles.inputIcon}>💳</span>
+                    <input type="text" inputMode="numeric" className={styles.input}
+                      placeholder="Enter 16 Digit Debit Card Number"
+                      value={cardNumber} onChange={handleCardInput} maxLength={19} autoComplete="cc-number" />
+                  </div>
+                  {fieldErr.cardNumber && <p className={styles.fieldErrMsg}>{fieldErr.cardNumber}</p>}
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>PIN <span className={styles.req}>*</span></label>
+                  <div className={styles.pinRow}>
+                    {pin.map((digit, i) => (
+                      <input key={i} id={`pin-${i}`} type="password" inputMode="numeric" maxLength={1}
+                        className={`${styles.pinBox} ${fieldErr.pin ? styles.pinBoxError : ''}`}
+                        value={digit} onChange={e => handlePinChange(i, e.target.value)}
+                        onKeyDown={e => handlePinKeyDown(i, e)} autoComplete="off"
+                        aria-label={`PIN digit ${i + 1}`} />
+                    ))}
+                  </div>
+                  {fieldErr.pin && <p className={styles.fieldErrMsg}>{fieldErr.pin}</p>}
+                </div>
+              </div>
+
+              <div className={styles.captchaSection}>
+                <label className={styles.label}>CAPTCHA <span className={styles.req}>*</span></label>
+                <div className={styles.captchaRow}>
+                  <div className={`${styles.inputWrap} ${styles.captchaInput} ${fieldErr.captcha ? styles.inputError : ''}`}>
+                    <span className={styles.inputIcon}>🛡</span>
+                    <input type="text" className={styles.input} placeholder="Enter CAPTCHA"
+                      value={captchaInput} onChange={e => { setCaptchaInput(e.target.value); setFieldErr(p => ({ ...p, captcha: '' })); }}
+                      maxLength={6} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
+                  </div>
+                  <button type="button" className={styles.refreshBtn} onClick={refreshCaptcha} title="Refresh CAPTCHA">↻</button>
+                  <div className={styles.captchaDisplay} aria-hidden="true">
+                    <CaptchaRenderer code={captchaCode} />
+                  </div>
+                </div>
+                {fieldErr.captcha && <p className={styles.fieldErrMsg}>{fieldErr.captcha}</p>}
+              </div>
+
+              <div className={styles.confirmRow}>
+                <label className={styles.checkLabel}>
+                  <input type="checkbox" className={styles.checkbox} checked={confirmed}
+                    onChange={e => { setConfirmed(e.target.checked); setFieldErr(p => ({ ...p, confirm: '' })); }} />
+                  <span className={styles.checkText}><em>I confirm that the credentials mentioned above are correct.</em></span>
+                </label>
+                {fieldErr.confirm && <p className={styles.fieldErrMsg}>{fieldErr.confirm}</p>}
+              </div>
+
+              <button type="submit" className={styles.loginBtn} disabled={loading}>
+                {loading ? <span className={styles.spinner}></span> : <>Login <span className={styles.loginArrow}>›</span></>}
+              </button>
+              <div className={styles.forgotWrap}>
+                <button type="button" className={styles.forgotBtn}
+                  onClick={() => alert('Forgot Password — Email OTP feature coming soon.')}>
+                  Forgot Password?
+                </button>
+              </div>
+              <div className={styles.secNote}>
+                <span className={styles.secIcon}>🛡</span>
+                <span>Your information is secure with us. We use advanced encryption to protect your data.</span>
+              </div>
+            </form>
+          )}
+
+        </div>
       </div>
-    </>
+
+    </div>
   );
 }
