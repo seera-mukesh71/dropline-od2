@@ -1,12 +1,15 @@
 'use client';
-
+import { useEffect }   from 'react';
 import { useRouter }   from 'next/navigation';
 import HeaderSimple    from './components/HeaderSimple';
 import styles          from './page.module.css';
 
 export default function LandingPage() {
   const router = useRouter();
-
+  useEffect(() => {
+  window.__chatbotPage = 'intro';
+  window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'intro' } }));
+  }, []);
   return (
     <div className={styles.pageWrapper}>
 

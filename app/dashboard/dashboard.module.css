@@ -1,4 +1,3 @@
-/* ── Loading ──────────────────────────────────────────── */
 .loading {
   min-height: 100vh; display: flex; align-items: center;
   justify-content: center; background: #f5f7fb;
@@ -10,48 +9,36 @@
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Page ─────────────────────────────────────────────── */
 .pageWrapper {
   min-height: 100vh; background: #f5f7fb;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ── Title Bar ────────────────────────────────────────── */
+/* Title bar */
 .titleBar {
   background: #fff; border-bottom: 1px solid #eee;
   padding: 14px 28px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .dashTitle {
-  font-size: 22px; font-weight: 800; color: #1a1a1a; margin: 0;
-  letter-spacing: -0.3px;
+  font-size: 22px; font-weight: 800; color: #1a1a1a; margin: 0; letter-spacing: -0.3px;
 }
-.titleActions { display: flex; align-items: center; gap: 10px; }
-.downloadBtn {
-  background: #E84E20; color: #fff; border: none;
-  border-radius: 8px; padding: 10px 18px; font-size: 13px;
-  font-weight: 700; cursor: pointer; transition: all 0.15s;
-  white-space: nowrap;
+.downloadSanctionBtn {
+  padding: 10px 20px; background: #E84E20; color: #fff; border: none;
+  border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: all 0.15s; font-family: inherit; white-space: nowrap;
 }
-.downloadBtn:hover { background: #C8102E; transform: translateY(-1px); }
-.bellBtn {
-  width: 38px; height: 38px; background: #fff; border: 1.5px solid #e0e0e0;
-  border-radius: 8px; font-size: 17px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color 0.15s;
-}
-.bellBtn:hover { border-color: #E84E20; }
+.downloadSanctionBtn:hover:not(:disabled) { background: #C8102E; transform: translateY(-1px); }
+.downloadSanctionBtn:disabled { opacity: 0.65; cursor: not-allowed; }
 
-/* ── Page Body ────────────────────────────────────────── */
+/* Page body */
 .pageBody { max-width: 1280px; margin: 0 auto; padding: 20px 24px 40px; }
 
-/* ── 6 Stat Cards ─────────────────────────────────────── */
+/* 6 stat cards */
 .statsRow {
   display: grid; grid-template-columns: repeat(6, 1fr);
-  gap: 0; background: #fff; border-radius: 14px;
-  border: 1px solid #f0f0f0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-  margin-bottom: 20px; overflow: hidden;
+  background: #fff; border-radius: 14px; border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden;
 }
 .statCard {
   display: flex; align-items: center; gap: 12px;
@@ -67,28 +54,25 @@
 .statValue { font-size: 17px; font-weight: 900; margin: 0 0 2px; line-height: 1; letter-spacing: -0.3px; }
 .statSub   { font-size: 10px; color: #aaa; margin: 0; }
 
-/* ── Main 3-column Grid ───────────────────────────────── */
+/* 3 column grid */
 .mainGrid {
   display: grid; grid-template-columns: 1fr 1.1fr 0.85fr;
   gap: 16px; margin-bottom: 16px;
 }
 
-/* ── Panel ────────────────────────────────────────────── */
+/* Panel */
 .panel {
-  background: #fff; border-radius: 14px;
-  padding: 22px 20px; border: 1px solid #f0f0f0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  background: #fff; border-radius: 14px; padding: 22px 20px;
+  border: 1px solid #f0f0f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 .panelTitle { font-size: 15px; font-weight: 800; margin: 0 0 6px; }
-.panelTitleRow { display: flex; align-items: center; justify-content: space-between; }
-.panelSub  { font-size: 12px; color: #666; margin: 0 0 14px; line-height: 1.5; }
+.panelSub   { font-size: 12px; color: #666; margin: 0 0 14px; line-height: 1.5; }
 
-/* ── Schedule info rows ───────────────────────────────── */
+/* Schedule */
 .scheduleInfo { margin-bottom: 14px; }
 .infoRow {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 7px 0; border-bottom: 1px solid #f5f5f5;
-  font-size: 12.5px;
+  padding: 7px 0; border-bottom: 1px solid #f5f5f5; font-size: 12.5px;
 }
 .infoRow:last-child { border-bottom: none; }
 .infoKey  { color: #555; }
@@ -96,7 +80,6 @@
 .dateOrange { color: #E84E20; font-weight: 700; }
 .daysLeft   { color: #2E7D32; font-size: 11px; font-weight: 600; }
 
-/* ── Schedule table ───────────────────────────────────── */
 .scheduleTable { border: 1px solid #f0f0f0; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
 .scheduleHeader {
   display: grid; grid-template-columns: 1fr 1fr 1fr;
@@ -111,7 +94,6 @@
 .scheduleRowAlt { background: #fafafa; }
 .scheduleMonth  { font-weight: 600; color: #1a1a1a; }
 
-/* ── Note box ─────────────────────────────────────────── */
 .noteBox {
   background: #FFF8F5; border: 1px solid #FFE0D4; border-radius: 8px;
   padding: 10px 12px; display: flex; gap: 8px; align-items: flex-start;
@@ -119,13 +101,12 @@
 }
 .noteIcon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
 
-/* ── Interest section ─────────────────────────────────── */
+/* Interest */
 .interestInfoBox {
   background: #FFF8F5; border: 1px solid #FFE0D4; border-radius: 8px;
   padding: 10px 12px; display: flex; gap: 8px; align-items: flex-start;
   font-size: 12px; color: #555; margin-bottom: 14px; line-height: 1.5;
 }
-
 .interestTable { border: 1px solid #f0f0f0; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
 .interestHeader {
   display: grid; grid-template-columns: 1fr 1.4fr 1fr 0.9fr 1fr;
@@ -140,49 +121,41 @@
 .interestRowAlt { background: #fafafa; }
 .interestTotalRow {
   display: grid; grid-template-columns: 1fr 1fr;
-  padding: 9px 10px; font-size: 12px;
-  border-top: 2px solid #eee; background: #fff;
+  padding: 9px 10px; font-size: 12px; border-top: 2px solid #eee;
 }
-
 .dailyRateBox {
   background: #E8F5E9; border-radius: 6px; padding: 8px 12px;
-  font-size: 11.5px; color: #2E7D32; font-weight: 600;
-  margin-bottom: 12px;
+  font-size: 11.5px; color: #2E7D32; font-weight: 600; margin-bottom: 12px;
 }
 
-/* ── View history button with tooltip ────────────────────*/
+/* History button */
 .historyBtn {
-  border: 1.5px solid #e0e8f5; border-radius: 10px;
-  padding: 12px 16px; display: flex; align-items: center;
-  justify-content: space-between; cursor: pointer;
-  font-size: 13px; font-weight: 600; color: #1565C0;
-  transition: border-color 0.15s, background 0.15s;
-  position: relative;
+  border: 1.5px solid #e0e8f5; border-radius: 10px; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; font-size: 13px; font-weight: 600; color: #1565C0;
+  transition: border-color 0.15s, background 0.15s; position: relative;
 }
 .historyBtn:hover { border-color: #1565C0; background: #f0f6ff; }
 .historyArrow { font-size: 18px; }
-
 .historyTooltip {
   position: absolute; bottom: calc(100% + 10px); left: 50%;
   transform: translateX(-50%);
-  background: #1a3a5c; color: #fff; font-size: 12px; font-weight: 400;
-  padding: 12px 16px; border-radius: 10px; width: 260px;
-  line-height: 1.55; text-align: left; pointer-events: none;
+  background: #1a3a5c; color: #fff; font-size: 12px; padding: 12px 16px;
+  border-radius: 10px; width: 260px; line-height: 1.55; pointer-events: none;
   box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 20;
   animation: fadeUp 0.18s ease;
 }
 .historyTooltip::after {
-  content: ''; position: absolute; top: 100%; left: 50%;
-  transform: translateX(-50%);
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
   border: 7px solid transparent; border-top-color: #1a3a5c;
 }
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from { opacity:0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity:1; transform: translateX(-50%) translateY(0); }
 }
 
-/* ── Key Details ──────────────────────────────────────── */
-.keyDetailsList { display: flex; flex-direction: column; gap: 0; }
+/* Key details */
+.keyDetailsList { display: flex; flex-direction: column; }
 .keyDetailRow {
   display: flex; align-items: center; justify-content: space-between;
   padding: 11px 0; border-bottom: 1px solid #f5f5f5;
@@ -193,7 +166,7 @@
 .keyDetailLabel { font-size: 12.5px; color: #666; }
 .keyDetailValue { font-size: 12.5px; font-weight: 700; color: #1a1a1a; text-align: right; max-width: 55%; }
 
-/* ── 3 Bottom Action Cards ────────────────────────────── */
+/* Action cards */
 .actionsRow {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 12px; margin-bottom: 16px;
@@ -203,56 +176,120 @@
   border-radius: 12px; padding: 18px 20px; cursor: default;
   transition: all 0.18s; position: relative;
 }
-.actionCard:nth-child(2) {
-  background: linear-gradient(135deg, #E84E20, #BF360C);
-}
-.actionCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(232,78,32,0.35);
-}
-.actionInner {
-  display: flex; align-items: center; gap: 12px;
-}
+.actionCard:nth-child(2) { background: linear-gradient(135deg, #E84E20, #BF360C); }
+.actionCard:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(232,78,32,0.35); }
+.actionInner { display: flex; align-items: center; gap: 12px; }
 .actionIconWrap {
-  width: 38px; height: 38px; background: rgba(255,255,255,0.18);
-  border-radius: 50%; display: flex; align-items: center;
-  justify-content: center; font-size: 18px; color: #fff; flex-shrink: 0;
+  width: 38px; height: 38px; background: rgba(255,255,255,0.18); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #fff; flex-shrink: 0;
 }
 .actionLabel { font-size: 14px; font-weight: 700; color: #fff; flex: 1; }
 .actionArrow { font-size: 22px; color: rgba(255,255,255,0.8); }
-
 .actionTooltip {
-  position: absolute; bottom: calc(100% + 10px); left: 50%;
-  transform: translateX(-50%);
-  background: #1a3a5c; color: #fff; font-size: 12px; font-weight: 400;
-  padding: 12px 16px; border-radius: 10px; width: 240px;
-  line-height: 1.55; pointer-events: none; z-index: 20;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  animation: fadeUp 0.18s ease;
+  position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  background: #1a3a5c; color: #fff; font-size: 12px; padding: 12px 16px;
+  border-radius: 10px; width: 240px; line-height: 1.55; pointer-events: none;
+  z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.2); animation: fadeUp 0.18s ease;
 }
 .actionTooltip::after {
-  content: ''; position: absolute; top: 100%; left: 50%;
-  transform: translateX(-50%);
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
   border: 7px solid transparent; border-top-color: #1a3a5c;
 }
 
-/* ── Footer note ──────────────────────────────────────── */
 .footerNote {
-  font-size: 11.5px; color: #888; text-align: center;
-  line-height: 1.7; padding: 0 20px;
+  font-size: 11.5px; color: #888; text-align: center; line-height: 1.7; padding: 0 20px;
 }
 
-/* ── Responsive ───────────────────────────────────────── */
+/* ── Congratulations Overlay ──────────────────────────── */
+.congratsOverlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.congratsCard {
+  background: #fff; border-radius: 20px; padding: 40px 40px 36px;
+  width: 100%; max-width: 460px; text-align: center;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+  position: relative; overflow: hidden;
+  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.congratsConfetti {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.congratsDot {
+  position: absolute; top: -16px; border-radius: 50%;
+  animation: fall 3.2s ease-in infinite;
+}
+@keyframes fall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(520px) rotate(360deg); opacity: 0; }
+}
+.congratsCheck {
+  width: 72px; height: 72px; background: #E84E20; color: #fff;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 36px; font-weight: 900; margin: 0 auto 18px;
+  box-shadow: 0 6px 24px rgba(232,78,32,0.35); position: relative; z-index: 1;
+}
+.congratsTitle {
+  font-size: 28px; font-weight: 900; color: #1a1a1a;
+  margin: 0 0 6px; letter-spacing: -0.5px; position: relative; z-index: 1;
+}
+.congratsSub {
+  font-size: 15px; color: #666; margin: 0 0 20px; position: relative; z-index: 1;
+}
+.congratsAmountBox {
+  background: linear-gradient(135deg, #fff5f2, #fff0eb);
+  border: 2px solid #E84E20; border-radius: 14px;
+  padding: 18px 20px 14px; margin-bottom: 18px; position: relative; z-index: 1;
+}
+.congratsAmountLabel {
+  font-size: 12px; color: #888; margin: 0 0 6px;
+  text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;
+}
+.congratsAmount {
+  font-size: 34px; font-weight: 900; color: #E84E20;
+  margin: 0 0 6px; letter-spacing: -0.5px;
+}
+.congratsAmountSub { font-size: 12px; color: #888; margin: 0; font-weight: 500; }
+.congratsInfo {
+  background: #f9f9f9; border-radius: 12px;
+  padding: 4px 0; margin-bottom: 22px; position: relative; z-index: 1;
+}
+.congratsInfoRow {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 16px; border-bottom: 1px solid #f0f0f0;
+  font-size: 13px; color: #555;
+}
+.congratsInfoRow:last-child { border-bottom: none; }
+.congratsBtn {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, #E84E20, #C8102E);
+  color: #fff; border: none; border-radius: 12px;
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  transition: all 0.18s; font-family: inherit;
+  position: relative; z-index: 1;
+  box-shadow: 0 4px 16px rgba(232,78,32,0.35);
+}
+.congratsBtn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,78,32,0.42); }
+
+/* Responsive */
 @media (max-width: 1100px) {
-  .statsRow { grid-template-columns: repeat(3, 1fr); }
+  .statsRow { grid-template-columns: repeat(3,1fr); }
   .statCard { border-bottom: 1px solid #f0f0f0; }
   .mainGrid { grid-template-columns: 1fr; }
   .actionsRow { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .pageBody { padding: 12px; }
-  .statsRow { grid-template-columns: 1fr 1fr; }
-  .titleBar { flex-direction: column; gap: 12px; }
-  .interestHeader { grid-template-columns: 0.8fr 1.2fr 1fr 0.8fr 1fr; font-size: 9.5px; }
-  .interestRow    { grid-template-columns: 0.8fr 1.2fr 1fr 0.8fr 1fr; font-size: 10px; }
+  .pageBody  { padding: 12px; }
+  .statsRow  { grid-template-columns: 1fr 1fr; }
+  .titleBar  { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .congratsCard  { padding: 28px 20px 24px; }
+  .congratsTitle { font-size: 22px; }
+  .congratsAmount { font-size: 26px; }
+  .downloadSanctionBtn { font-size: 12px; padding: 8px 14px; }
 }

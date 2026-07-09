@@ -128,8 +128,7 @@
 .esignGrid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;
 }
-.esignLeft  {}
-.esignRight {}
+
 .esignRightHidden { visibility: hidden; pointer-events: none; }
 
 .esignFieldLabel { font-size: 13px; font-weight: 700; color: #1a3a5c; margin: 0 0 8px; }
