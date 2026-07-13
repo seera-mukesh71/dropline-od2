@@ -96,3 +96,26 @@
   .headerInner { padding: 0 16px; }
   .iciciLogo  { height: 26px; }
 }
+
+.headerInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.support {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color:#F58220;
+}
+
+.phoneIcon {
+  font-size: 18px;
+}
+
+.phoneNumber {
+  white-space: nowrap;
+}
