@@ -66,7 +66,10 @@ export default function ApplyPage() {
 
   const [customer,  setCustomer]  = useState(null);
   const [appNumber, setAppNumber] = useState('');
-
+  useEffect(() => {
+    window.__chatbotPage = 'login';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'esign' } }));
+  }, []);
   useEffect(() => {
     const s = sessionStorage.getItem('odCustomer');
     if (!s) { router.push('/'); return; }

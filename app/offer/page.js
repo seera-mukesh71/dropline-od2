@@ -25,7 +25,10 @@ export default function OfferPage() {
   const [appNumber, setAppNumber] = useState('');
   const [inputVal,  setInputVal]  = useState('');
   const [selectedAmt, setSelectedAmt] = useState(0);
-
+  useEffect(() => {
+    window.__chatbotPage = 'login';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'offer' } }));
+  }, []);
   useEffect(() => {
     const s = sessionStorage.getItem('odCustomer');
     if (!s) { router.push('/'); return; }
@@ -253,7 +256,7 @@ export default function OfferPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className={styles.statLabel}>Offer Validity</p>
+                  <p className={styles.statLabel}>Validity</p>
                   <p className={styles.statValue}>365 Days</p>
                 </div>
               </div>

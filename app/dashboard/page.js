@@ -36,7 +36,10 @@ export default function DashboardPage() {
   const [showHistory,   setShowHistory]   = useState(false);
   const [showCongrats,  setShowCongrats]  = useState(false);
   const [downloading,   setDownloading]   = useState(false);
-
+  useEffect(() => {
+    window.__chatbotPage = 'login';
+    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'dashboard' } }));
+  }, []);
   useEffect(() => {
     // Chatbot page signal
     window.__chatbotPage = 'dashboard';
