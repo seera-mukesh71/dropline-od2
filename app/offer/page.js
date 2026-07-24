@@ -256,8 +256,8 @@ export default function OfferPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className={styles.statLabel}>Validity</p>
-                  <p className={styles.statValue}>365 Days</p>
+                  <p className={styles.statLabel}>Renewal</p>
+                  <p className={styles.statValue}>Every 12 Months</p>
                 </div>
               </div>
 
