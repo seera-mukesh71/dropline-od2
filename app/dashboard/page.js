@@ -30,29 +30,24 @@ function fmtDate(date) {
 export default function DashboardPage() {
   const router = useRouter();
 
-  const [customer,      setCustomer]      = useState(null);
-  const [appNumber,     setAppNumber]     = useState('');
-  const [hoverAction,   setHoverAction]   = useState(null);
-  const [showHistory,   setShowHistory]   = useState(false);
-  const [showCongrats,  setShowCongrats]  = useState(false);
-  const [downloading,   setDownloading]   = useState(false);
-  useEffect(() => {
-    window.__chatbotPage = 'login';
-    window.dispatchEvent(new CustomEvent('chatbot:pagechange', { detail: { page: 'dashboard' } }));
-  }, []);
+  const [customer,     setCustomer]     = useState(null);
+  const [appNumber,    setAppNumber]    = useState('');
+  const [hoverAction,  setHoverAction]  = useState(null);
+  const [showHistory,  setShowHistory]  = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [downloading,  setDownloading]  = useState(false);
+
   useEffect(() => {
     // Chatbot page signal
     window.__chatbotPage = 'dashboard';
-    const iframe = document.querySelector('iframe');
-    if (iframe?.contentWindow) {
-      iframe.contentWindow.postMessage({ type: 'pagechange', page: 'dashboard' }, '*');
-    }
-    setTimeout(() => {
-      const iframe2 = document.querySelector('iframe');
-      if (iframe2?.contentWindow) {
-        iframe2.contentWindow.postMessage({ type: 'pagechange', page: 'dashboard' }, '*');
+    const send = () => {
+      const iframe = document.querySelector('iframe');
+      if (iframe?.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'pagechange', page: 'dashboard' }, '*');
       }
-    }, 1000);
+    };
+    send();
+    setTimeout(send, 1000);
 
     const s = sessionStorage.getItem('odCustomer');
     if (!s) { router.push('/'); return; }
@@ -62,12 +57,10 @@ export default function DashboardPage() {
     const appNum = sessionStorage.getItem('appNumber') || 'CAODE000000';
     setAppNumber(appNum);
 
-    // Show congrats overlay only on first visit
     const seen = sessionStorage.getItem('hasSeenCongrats');
     if (!seen) setShowCongrats(true);
   }, [router]);
 
-  // ── Download Sanction Letter ──────────────────────────────────────────
   async function handleDownloadSanction() {
     if (!customer) return;
     setDownloading(true);
@@ -105,7 +98,6 @@ export default function DashboardPage() {
     );
   }
 
-  // ── Derived values ────────────────────────────────────────────────────
   const sanctioned     = Number(customer.finalAmount || customer.offerAmount || 0);
   const dailyRate      = INTEREST_RATE_PA / 100 / 365;
   const monthlyReduce  = sanctioned / TENURE_MONTHS;
@@ -119,15 +111,14 @@ export default function DashboardPage() {
   const daysElapsed      = 15;
   const daysLeft         = 12;
 
-  // Interest last 5 days
-  const base = new Date(2025, 4, 11);
+  const base       = new Date(2025, 4, 11);
   const withdrawal = Math.round(utilizedAmt * 0.4 / 1000) * 1000;
   const interestRows = [
-    { date: new Date(base),                        activity: 'No Transaction',                    utilized: utilizedAmt },
-    { date: new Date(base.getTime()+86400000),     activity: 'No Transaction',                    utilized: utilizedAmt },
-    { date: new Date(base.getTime()+86400000*2),   activity: `Withdrawal +₹${formatINR(withdrawal)}`, utilized: utilizedAmt + withdrawal },
-    { date: new Date(base.getTime()+86400000*3),   activity: 'No Transaction',                    utilized: utilizedAmt + withdrawal },
-    { date: new Date(base.getTime()+86400000*4),   activity: `Repayment -₹${formatINR(withdrawal)}`,  utilized: utilizedAmt },
+    { date: new Date(base),                      activity: 'No Transaction',                    utilized: utilizedAmt },
+    { date: new Date(base.getTime()+86400000),   activity: 'No Transaction',                    utilized: utilizedAmt },
+    { date: new Date(base.getTime()+86400000*2), activity: `Withdrawal +₹${formatINR(withdrawal)}`, utilized: utilizedAmt + withdrawal },
+    { date: new Date(base.getTime()+86400000*3), activity: 'No Transaction',                    utilized: utilizedAmt + withdrawal },
+    { date: new Date(base.getTime()+86400000*4), activity: `Repayment -₹${formatINR(withdrawal)}`,  utilized: utilizedAmt },
   ];
 
   let runningAccrued = 0;
@@ -138,13 +129,12 @@ export default function DashboardPage() {
   });
   const totalAccrued = runningAccrued;
 
-  // Dropline schedule
   const scheduleRows = [
-    { label: 'At Sanction', date: fmtDate(activationDate), limit: sanctioned },
+    { label: 'At Sanction', date: fmtDate(activationDate),              limit: sanctioned },
     { label: 'Month 1',     date: fmtDate(addMonths(activationDate, 1)), limit: sanctioned - monthlyReduce },
     { label: 'Month 2',     date: fmtDate(addMonths(activationDate, 2)), limit: sanctioned - monthlyReduce * 2 },
     { label: 'Month 3',     date: fmtDate(addMonths(activationDate, 3)), limit: sanctioned - monthlyReduce * 3 },
-    { label: '...',          date: '...', limit: null },
+    { label: '...',          date: '...',                                 limit: null },
     { label: `Month ${TENURE_MONTHS}`, date: fmtDate(addMonths(activationDate, TENURE_MONTHS)), limit: 0 },
   ];
 
@@ -162,7 +152,6 @@ export default function DashboardPage() {
 
       <HeaderWithApp appNumber={appNumber} />
 
-      {/* ── TITLE BAR ──────────────────────────────────────────────── */}
       <div className={styles.titleBar}>
         <h1 className={styles.dashTitle}>Dropline OD Dashboard</h1>
         <button
@@ -179,12 +168,12 @@ export default function DashboardPage() {
         {/* ── 6 STAT CARDS ─────────────────────────────────────────── */}
         <div className={styles.statsRow}>
           {[
-            { icon: '🏦', label: 'Sanctioned Limit',     value: `₹${formatINR(sanctioned)}`,      sub: 'Total Approved Limit',        color: '#E84E20' },
-            { icon: '💳', label: 'Available Limit',       value: `₹${formatINR(availableAmt)}`,    sub: 'Currently Available',          color: '#2E7D32' },
-            { icon: '📊', label: 'Utilized Amount',       value: `₹${formatINR(utilizedAmt)}`,     sub: 'Total Utilized',               color: '#1565C0' },
-            { icon: '%',  label: 'Accrued Interest',      value: `₹${formatINR2(totalAccrued)}`,   sub: 'Interest Accrued till date',   color: '#E84E20' },
-            { icon: '%',  label: 'Interest Rate (p.a.)',   value: `${INTEREST_RATE_PA}%`,           sub: 'Fixed Rate',                   color: '#6A1B9A' },
-            { icon: '📄', label: 'Processing Fee',        value: `${PROCESSING_FEE}%`,             sub: 'One-time',                     color: '#E84E20' },
+            { icon: '🏦', label: 'Sanctioned Limit',   value: `₹${formatINR(sanctioned)}`,    sub: 'Total Approved Limit',      color: '#E84E20' },
+            { icon: '💳', label: 'Available Limit',     value: `₹${formatINR(availableAmt)}`,  sub: 'Currently Available',        color: '#2E7D32' },
+            { icon: '📊', label: 'Utilized Amount',     value: `₹${formatINR(utilizedAmt)}`,   sub: 'Total Utilized',             color: '#1565C0' },
+            { icon: '%',  label: 'Accrued Interest',    value: `₹${formatINR2(totalAccrued)}`, sub: 'Interest Accrued till date', color: '#E84E20' },
+            { icon: '%',  label: 'Interest Rate (p.a.)', value: `${INTEREST_RATE_PA}%`,         sub: 'Fixed Rate',                 color: '#6A1B9A' },
+            { icon: '📄', label: 'Processing Fee',      value: `${PROCESSING_FEE}%`,           sub: 'One-time',                   color: '#E84E20' },
           ].map(card => (
             <div key={card.label} className={styles.statCard}>
               <div className={styles.statIconWrap}>{card.icon}</div>
@@ -355,68 +344,93 @@ export default function DashboardPage() {
       </div>
 
       {/* ══════════════════════════════════════════════════════════════
-          CONGRATULATIONS OVERLAY — first visit only
+          CONGRATULATIONS OVERLAY — ICICI themed, professional
       ══════════════════════════════════════════════════════════════ */}
       {showCongrats && customer && (
         <div className={styles.congratsOverlay}>
           <div className={styles.congratsCard}>
 
-            <div className={styles.congratsConfetti} aria-hidden="true">
-              {[...Array(14)].map((_, i) => (
-                <div key={i} className={styles.congratsDot} style={{
-                  left:           `${(i * 7 + 3) % 100}%`,
-                  animationDelay: `${i * 0.14}s`,
-                  background:     ['#FFD54F','#fff','#A5D6A7','#90CAF9','#FFAB91','#CE93D8'][i%6],
-                  width:          `${8 + (i%3)*4}px`,
-                  height:         `${8 + (i%3)*4}px`,
-                }} />
-              ))}
+            {/* Red header band */}
+            <div className={styles.congratsHeader}>
+              <div className={styles.congratsHeaderLogo}>
+                <img src="/icici-logo.png" alt="ICICI Bank" style={{ height:28, width:'auto', objectFit:'contain', filter:'brightness(0) invert(1)' }} />
+              </div>
+              <div className={styles.congratsHeaderCheck}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
             </div>
 
-            <div className={styles.congratsCheck}>✓</div>
-            <h2 className={styles.congratsTitle}>Congratulations!</h2>
-            <p className={styles.congratsSub}>Your Dropline OD Has Been Activated</p>
-
-            <div className={styles.congratsAmountBox}>
-              <p className={styles.congratsAmountLabel}>Your Sanctioned OD Limit</p>
-              <p className={styles.congratsAmount}>
-                ₹ {Number(customer.finalAmount || customer.offerAmount || 0).toLocaleString('en-IN')}
+            {/* Body */}
+            <div className={styles.congratsBody}>
+              <h2 className={styles.congratsTitle}>Congratulations!</h2>
+              <p className={styles.congratsSub}>
+                Your Dropline OD facility has been successfully activated.
               </p>
-              <p className={styles.congratsAmountSub}>
-                {customer.tier || 'Normal'} Tier &nbsp;·&nbsp;
-                {customer.interestRate || INTEREST_RATE_PA}% p.a. &nbsp;·&nbsp;
-                {TENURE_MONTHS} Months Tenure
+
+              {/* Amount box */}
+              <div className={styles.congratsAmountBox}>
+                <p className={styles.congratsAmountLabel}>Sanctioned OD Limit</p>
+                <p className={styles.congratsAmount}>
+                  ₹ {Number(customer.finalAmount || customer.offerAmount || 0).toLocaleString('en-IN')}
+                </p>
+                <div className={styles.congratsAmountTags}>
+                  <span className={styles.congratsTag}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    {INTEREST_RATE_PA}% p.a.
+                  </span>
+                  <span className={styles.congratsTag}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    {TENURE_MONTHS} Months
+                  </span>
+                  <span className={styles.congratsTag}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Unsecured
+                  </span>
+                </div>
+              </div>
+
+              {/* Info rows */}
+              <div className={styles.congratsInfoGrid}>
+                <div className={styles.congratsInfoItem}>
+                  <p className={styles.congratsInfoLabel}>Account Number</p>
+                  <p className={styles.congratsInfoValue}>{customer.accountNumber || customer.cardNumber || 'N/A'}</p>
+                </div>
+                <div className={styles.congratsInfoItem}>
+                  <p className={styles.congratsInfoLabel}>Status</p>
+                  <p className={styles.congratsInfoValue} style={{ color:'#2E7D32' }}>● Active</p>
+                </div>
+                <div className={styles.congratsInfoItem}>
+                  <p className={styles.congratsInfoLabel}>Processing Fee</p>
+                  <p className={styles.congratsInfoValue}>{PROCESSING_FEE}% (One-time)</p>
+                </div>
+                <div className={styles.congratsInfoItem}>
+                  <p className={styles.congratsInfoLabel}>Interest Charged On</p>
+                  <p className={styles.congratsInfoValue}>Utilized Amount Only</p>
+                </div>
+              </div>
+
+              <button
+                className={styles.congratsBtn}
+                onClick={() => {
+                  sessionStorage.setItem('hasSeenCongrats', 'true');
+                  setShowCongrats(false);
+                }}
+              >
+                Go to My Dashboard →
+              </button>
+
+              <p className={styles.congratsNote}>
+                Download your Sanction Letter from the dashboard anytime.
               </p>
             </div>
-
-            <div className={styles.congratsInfo}>
-              <div className={styles.congratsInfoRow}>
-                <span>💳 Access Via</span>
-                <span>Your Current Account</span>
-              </div>
-              <div className={styles.congratsInfoRow}>
-                <span>⚡ Status</span>
-                <span style={{ color:'#2E7D32', fontWeight:700 }}>Active Now</span>
-              </div>
-              <div className={styles.congratsInfoRow}>
-                <span>💰 Interest</span>
-                <span>Only on amount utilized</span>
-              </div>
-              <div className={styles.congratsInfoRow}>
-                <span>📄 Account</span>
-                <span>{customer.accountNumber || customer.cardNumber || 'N/A'}</span>
-              </div>
-            </div>
-
-            <button
-              className={styles.congratsBtn}
-              onClick={() => {
-                sessionStorage.setItem('hasSeenCongrats', 'true');
-                setShowCongrats(false);
-              }}
-            >
-              Go to My Dashboard →
-            </button>
 
           </div>
         </div>

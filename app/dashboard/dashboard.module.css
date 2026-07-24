@@ -21,7 +21,8 @@
   display: flex; align-items: center; justify-content: space-between;
 }
 .dashTitle {
-  font-size: 22px; font-weight: 800; color: #1a1a1a; margin: 0; letter-spacing: -0.3px;
+  font-size: 22px; font-weight: 800; color: #1a1a1a;
+  margin: 0; letter-spacing: -0.3px;
 }
 .downloadSanctionBtn {
   padding: 10px 20px; background: #E84E20; color: #fff; border: none;
@@ -146,7 +147,8 @@
   animation: fadeUp 0.18s ease;
 }
 .historyTooltip::after {
-  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
   border: 7px solid transparent; border-top-color: #1a3a5c;
 }
 @keyframes fadeUp {
@@ -180,102 +182,139 @@
 .actionCard:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(232,78,32,0.35); }
 .actionInner { display: flex; align-items: center; gap: 12px; }
 .actionIconWrap {
-  width: 38px; height: 38px; background: rgba(255,255,255,0.18); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; color: #fff; flex-shrink: 0;
+  width: 38px; height: 38px; background: rgba(255,255,255,0.18);
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 18px; color: #fff; flex-shrink: 0;
 }
 .actionLabel { font-size: 14px; font-weight: 700; color: #fff; flex: 1; }
 .actionArrow { font-size: 22px; color: rgba(255,255,255,0.8); }
 .actionTooltip {
-  position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%);
   background: #1a3a5c; color: #fff; font-size: 12px; padding: 12px 16px;
   border-radius: 10px; width: 240px; line-height: 1.55; pointer-events: none;
-  z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.2); animation: fadeUp 0.18s ease;
+  z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  animation: fadeUp 0.18s ease;
 }
 .actionTooltip::after {
-  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
   border: 7px solid transparent; border-top-color: #1a3a5c;
 }
 
 .footerNote {
-  font-size: 11.5px; color: #888; text-align: center; line-height: 1.7; padding: 0 20px;
+  font-size: 11.5px; color: #888; text-align: center;
+  line-height: 1.7; padding: 0 20px;
 }
 
-/* ── Congratulations Overlay ──────────────────────────── */
+/* ══════════════════════════════════════════════════════
+   CONGRATULATIONS OVERLAY — ICICI professional theme
+══════════════════════════════════════════════════════ */
 .congratsOverlay {
   position: fixed; inset: 0; z-index: 999;
-  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  background: rgba(10,25,47,0.65); backdrop-filter: blur(6px);
   display: flex; align-items: center; justify-content: center; padding: 24px;
 }
+
 .congratsCard {
-  background: #fff; border-radius: 20px; padding: 40px 40px 36px;
-  width: 100%; max-width: 460px; text-align: center;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
-  position: relative; overflow: hidden;
-  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  width: 100%; max-width: 440px;
+  background: #fff; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.28);
+  animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
 }
-@keyframes popIn {
-  from { transform: scale(0.88); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
+@keyframes slideUp {
+  from { transform: translateY(40px) scale(0.95); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
 }
-.congratsConfetti {
-  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+
+/* Red header band */
+.congratsHeader {
+  background: linear-gradient(135deg, #E84E20, #C8102E);
+  padding: 22px 28px;
+  display: flex; align-items: center; justify-content: space-between;
 }
-.congratsDot {
-  position: absolute; top: -16px; border-radius: 50%;
-  animation: fall 3.2s ease-in infinite;
+.congratsHeaderLogo { display: flex; align-items: center; }
+.congratsHeaderCheck {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.22);
+  border: 2px solid rgba(255,255,255,0.40);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
 }
-@keyframes fall {
-  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(520px) rotate(360deg); opacity: 0; }
-}
-.congratsCheck {
-  width: 72px; height: 72px; background: #E84E20; color: #fff;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 36px; font-weight: 900; margin: 0 auto 18px;
-  box-shadow: 0 6px 24px rgba(232,78,32,0.35); position: relative; z-index: 1;
-}
+
+/* Body */
+.congratsBody { padding: 28px 28px 24px; }
+
 .congratsTitle {
-  font-size: 28px; font-weight: 900; color: #1a1a1a;
-  margin: 0 0 6px; letter-spacing: -0.5px; position: relative; z-index: 1;
+  font-size: 24px; font-weight: 900; color: #1a1a1a;
+  margin: 0 0 6px; letter-spacing: -0.3px;
 }
 .congratsSub {
-  font-size: 15px; color: #666; margin: 0 0 20px; position: relative; z-index: 1;
+  font-size: 14px; color: #666; margin: 0 0 20px; line-height: 1.55;
 }
+
+/* Amount box */
 .congratsAmountBox {
-  background: linear-gradient(135deg, #fff5f2, #fff0eb);
-  border: 2px solid #E84E20; border-radius: 14px;
-  padding: 18px 20px 14px; margin-bottom: 18px; position: relative; z-index: 1;
+  background: #FFF8F5; border: 2px solid #E84E20;
+  border-radius: 12px; padding: 18px 20px; margin-bottom: 18px;
 }
 .congratsAmountLabel {
-  font-size: 12px; color: #888; margin: 0 0 6px;
-  text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;
+  font-size: 11px; color: #888; margin: 0 0 6px;
+  text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600;
 }
 .congratsAmount {
-  font-size: 34px; font-weight: 900; color: #E84E20;
-  margin: 0 0 6px; letter-spacing: -0.5px;
+  font-size: 32px; font-weight: 900; color: #E84E20;
+  margin: 0 0 12px; letter-spacing: -0.5px;
 }
-.congratsAmountSub { font-size: 12px; color: #888; margin: 0; font-weight: 500; }
-.congratsInfo {
-  background: #f9f9f9; border-radius: 12px;
-  padding: 4px 0; margin-bottom: 22px; position: relative; z-index: 1;
+.congratsAmountTags {
+  display: flex; gap: 8px; flex-wrap: wrap;
 }
-.congratsInfoRow {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 16px; border-bottom: 1px solid #f0f0f0;
-  font-size: 13px; color: #555;
+.congratsTag {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #fff; border: 1px solid #e0e0e0;
+  color: #444; font-size: 11.5px; font-weight: 600;
+  padding: 4px 10px; border-radius: 20px;
 }
-.congratsInfoRow:last-child { border-bottom: none; }
+
+/* Info grid */
+.congratsInfoGrid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; border: 1px solid #f0f0f0; border-radius: 10px;
+  overflow: hidden; margin-bottom: 20px;
+}
+.congratsInfoItem {
+  padding: 12px 14px; border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.congratsInfoItem:nth-child(2) { border-right: none; }
+.congratsInfoItem:nth-child(3) { border-bottom: none; }
+.congratsInfoItem:nth-child(4) { border-right: none; border-bottom: none; }
+.congratsInfoLabel {
+  font-size: 10.5px; color: #999; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.3px; margin: 0 0 4px;
+}
+.congratsInfoValue {
+  font-size: 13px; font-weight: 700; color: #1a1a1a; margin: 0;
+}
+
 .congratsBtn {
-  width: 100%; padding: 15px;
+  width: 100%; padding: 14px;
   background: linear-gradient(135deg, #E84E20, #C8102E);
-  color: #fff; border: none; border-radius: 12px;
-  font-size: 16px; font-weight: 700; cursor: pointer;
+  color: #fff; border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 800; cursor: pointer;
   transition: all 0.18s; font-family: inherit;
-  position: relative; z-index: 1;
   box-shadow: 0 4px 16px rgba(232,78,32,0.35);
+  margin-bottom: 12px;
 }
-.congratsBtn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,78,32,0.42); }
+.congratsBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232,78,32,0.45);
+}
+
+.congratsNote {
+  font-size: 11.5px; color: #aaa; text-align: center;
+  margin: 0; line-height: 1.5;
+}
 
 /* Responsive */
 @media (max-width: 1100px) {
@@ -288,8 +327,10 @@
   .pageBody  { padding: 12px; }
   .statsRow  { grid-template-columns: 1fr 1fr; }
   .titleBar  { flex-direction: column; gap: 12px; align-items: flex-start; }
-  .congratsCard  { padding: 28px 20px 24px; }
-  .congratsTitle { font-size: 22px; }
-  .congratsAmount { font-size: 26px; }
   .downloadSanctionBtn { font-size: 12px; padding: 8px 14px; }
+  .congratsCard { border-radius: 14px; }
+  .congratsBody { padding: 20px 18px 18px; }
+  .congratsAmount { font-size: 26px; }
+  .congratsInfoGrid { grid-template-columns: 1fr; }
+  .congratsInfoItem { border-right: none !important; }
 }
